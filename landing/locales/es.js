@@ -33,7 +33,6 @@ window.RK_LOCALES.es = {
   "takes.lead": "Son interpretaciones distintas: escucha el tono, no las notas.",
   "take.before": "Antes",
   "take.after": "Calibrado",
-  "take.mid": "Segunda pasada",
   "method.title": "Cómo se calibra un preset",
   "m1.t": "Medir al pianista",
   "m1.p": "Cuatro rondas de pp a ff en el MX88 definen la curva de velocidad, para que suave de verdad suene suave.",

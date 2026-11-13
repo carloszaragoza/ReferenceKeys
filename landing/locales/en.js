@@ -33,7 +33,6 @@ window.RK_LOCALES.en = {
   "takes.lead": "Different performances, so listen for the tone, not the notes.",
   "take.before": "Before",
   "take.after": "Calibrated",
-  "take.mid": "Second pass",
   "method.title": "How a preset gets calibrated",
   "m1.t": "Measure the player",
   "m1.p": "Four rounds of pp to ff on the MX88 set the velocity curve, so soft really means soft.",
