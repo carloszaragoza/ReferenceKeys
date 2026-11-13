@@ -29,7 +29,7 @@
 
   /* space: 4px base; sections and gutters are fluid */
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px; --s-9:96px;
-  --section:var(--section); --gutter:clamp(16px,4vw,40px); --max:1240px;
+  --section:clamp(72px,10vw,128px); --gutter:clamp(16px,4vw,40px); --max:1240px;
 
   /* shape and motion */
   --r:14px; --r-sm:10px; --pill:999px;
