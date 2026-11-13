@@ -3,6 +3,7 @@ private/
 __pycache__/
 *.pyc
 tools/render/render
+tools/render/dumpstate
 tools/render/probe
 tools/midi/velmeter
 .venv/

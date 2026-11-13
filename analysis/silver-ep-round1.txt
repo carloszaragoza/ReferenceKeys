@@ -39,3 +39,8 @@ Open
   Dynamics: not calibrated. Synthetic timing makes the dynamic range (9 to 13 dB) incomparable with the demos' 5.8 dB.
   The Tape Slammer P2 had no measurable effect. Check by playing.
   Untested knobs: Vintage 2-Band EQ P1 and P6 changed nothing measurable.
+
+Format fix (2026-11-13): patches read straight out of the factory library database use an older internal format
+(SYNTHENG Vers 22, no per-model interface data), so Keyscape showed the patch name but not the model. The patch
+is now round-tripped through the Keyscape AU (tools/render/dumpstate) and saved in the format Keyscape writes
+itself (Vers 29). Same calibrated values, identical render.
