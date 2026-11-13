@@ -26,6 +26,15 @@
         "value": "geist mono",
         "createdAt": "2026-11-13T11:35:22.314Z",
         "reason": "Claude: intentional; Geist Mono is the functional numeric face, brand personality comes from Big Shoulders Display (see landing/DESIGN.md)"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "landing/index.html"
+        ],
+        "createdAt": "2026-11-13T15:25:33.000Z",
+        "reason": "Claude: intentional; uppercase Big Shoulders Display headings (.film__sub, .h2, wordmark) are set at .92-.95 by the type system in landing/DESIGN.md; body text stays at 1.5+"
       }
     ]
   }
