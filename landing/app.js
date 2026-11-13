@@ -9,73 +9,8 @@
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 
-  /* ---------- i18n: system language picks the default, toggle overrides ---------- */
-  const T = {
-    en: {
-      skip: 'Skip to content', 'nav.compare': 'Compare', 'nav.listen': 'Listen', 'nav.method': 'Method', 'nav.presets': 'Presets',
-      'cta.download': 'Download presets', 'cta.listen': 'Listen',
-      'hero.title': 'Piano presets, calibrated against <em>the real thing.</em>',
-      'hero.sub': 'Keyscape and Omnisphere patches tuned by measurement, matched band by band to recordings of real concert grands.',
-      'hero.cap': 'CZ German Concert V2, rendered from my own performance. Tap to play.',
-      'proof.1': 'Royal 3D vs the Nord, every octave from 32 Hz to 8 kHz', 'proof.2': 'German Concert V2 brightness center vs the Roland',
-      'proof.3': 'Left and right balance after the fix', 'proof.4': 'Velocities measured on a Yamaha MX88',
-      'compare.eyebrow': 'Measured, not guessed', 'compare.title': 'Watch the gap close.',
-      'compare.lead': 'Each line is the tonal balance of a recording, octave by octave. The goal is the reference line.',
-      'legend.before': 'First version', 'legend.after': 'Calibrated',
-      'm.tilt': 'Tilt, 250 Hz to 8 kHz', 'm.centroid': 'Brightness center', 'm.width': 'Stereo width', 'm.balance': 'Left and right balance', 'm.ref': 'ref',
-      'note.german': 'Both versions render the same MIDI performance, so the patch is the only difference. Reference: Roland RD-2000 V-Piano expansion demo.',
-      'note.royal': 'Live takes on my MX88, compared with the Nord Grand Royal Grand 3D demo. The shipped preset is the third pass.',
-      'note.cfx': 'Live takes compared with the official Yamaha CFX demo. The shipped preset adds a third pass on the highs, not yet re-measured.',
-      'listen.title': 'Same performance. Two patches.',
-      'listen.lead': 'One MIDI take rendered through both versions of German Concert. Switch while it plays: only the patch changes.',
-      'takes.title': 'Live takes on my MX88', 'takes.lead': 'Different performances, so listen for the tone, not the notes.',
-      'take.before': 'Before', 'take.after': 'Calibrated', 'take.mid': 'Second pass',
-      'method.title': 'How a preset gets calibrated',
-      'm1.t': 'Measure the player', 'm1.p': 'Four rounds of pp to ff on the MX88 set the velocity curve, so soft really means soft.',
-      'm2.t': 'Render the same take', 'm2.p': 'MIDI goes through the Keyscape plugin offline. Every render is bit-identical, so any change you hear is the patch.',
-      'm3.t': 'Compare against the reference', 'm3.p': 'Ten octave bands, tilt, stereo width and left and right balance.',
-      'm4.t': 'Tune, then check again', 'm4.p': 'Nine render passes for German Concert V2. One of them caught a 7 dB lean to the left before it shipped.',
-      'presets.title': "What's in the pack", g1: 'Calibrated against a reference', g2: 'Keyscape', g3: 'Omnisphere', g4: 'Velocity curves',
-      'install.title': 'Installed in a minute', 's1.t': 'Download', 's1.p': 'Grab the zip from GitHub and unpack it.',
-      's2.t': 'Copy', 's2.p': 'Drop each folder into your Spectrasonics user library.', 's3.t': 'Refresh', 's3.p': 'Hit Refresh Library in the plugin browser.',
-      copy: 'Copy path', copied: 'Copied',
-      'foot.req': 'Requires licensed copies of Spectrasonics Keyscape and/or Omnisphere. These are settings only, no samples.',
-      'foot.tm': 'Not affiliated with Spectrasonics, Yamaha, Nord or Roland. Product names belong to their owners and are used only to describe the reference recordings.',
-      play: 'Play', pause: 'Pause', lang: 'Cambiar a español'
-    },
-    es: {
-      skip: 'Saltar al contenido', 'nav.compare': 'Comparar', 'nav.listen': 'Escuchar', 'nav.method': 'Método', 'nav.presets': 'Presets',
-      'cta.download': 'Descargar presets', 'cta.listen': 'Escuchar',
-      'hero.title': 'Presets de piano calibrados contra <em>el original.</em>',
-      'hero.sub': 'Patches para Keyscape y Omnisphere ajustados midiendo, banda por banda, contra grabaciones de pianos de concierto reales.',
-      'hero.cap': 'CZ German Concert V2, renderizado desde mi propia interpretación. Toca para escuchar.',
-      'proof.1': 'Royal 3D contra el Nord, cada octava de 32 Hz a 8 kHz', 'proof.2': 'Centro de brillo de German Concert V2 contra el Roland',
-      'proof.3': 'Balance izquierda y derecha después de la corrección', 'proof.4': 'Velocidades medidas en un Yamaha MX88',
-      'compare.eyebrow': 'Medido, no adivinado', 'compare.title': 'Mira cómo se cierra la distancia.',
-      'compare.lead': 'Cada línea es el balance tonal de una grabación, octava por octava. La meta es la línea de referencia.',
-      'legend.before': 'Primera versión', 'legend.after': 'Calibrado',
-      'm.tilt': 'Inclinación, 250 Hz a 8 kHz', 'm.centroid': 'Centro de brillo', 'm.width': 'Amplitud estéreo', 'm.balance': 'Balance izquierda y derecha', 'm.ref': 'ref',
-      'note.german': 'Las dos versiones renderizan la misma interpretación MIDI, así que el patch es la única diferencia. Referencia: demo de la expansión V-Piano del Roland RD-2000.',
-      'note.royal': 'Tomas en vivo en mi MX88, comparadas con el demo del Nord Grand Royal Grand 3D. El preset publicado es la tercera pasada.',
-      'note.cfx': 'Tomas en vivo comparadas con el demo oficial del Yamaha CFX. El preset publicado agrega una tercera pasada en los agudos, aún sin volver a medir.',
-      'listen.title': 'La misma interpretación. Dos patches.',
-      'listen.lead': 'Una toma MIDI renderizada con las dos versiones de German Concert. Cambia mientras suena: solo cambia el patch.',
-      'takes.title': 'Tomas en vivo en mi MX88', 'takes.lead': 'Son interpretaciones distintas: escucha el tono, no las notas.',
-      'take.before': 'Antes', 'take.after': 'Calibrado', 'take.mid': 'Segunda pasada',
-      'method.title': 'Cómo se calibra un preset',
-      'm1.t': 'Medir al pianista', 'm1.p': 'Cuatro rondas de pp a ff en el MX88 definen la curva de velocidad, para que suave de verdad suene suave.',
-      'm2.t': 'Renderizar la misma toma', 'm2.p': 'El MIDI pasa por el plugin de Keyscape sin tiempo real. Cada render es idéntico, así que lo que cambia es el patch.',
-      'm3.t': 'Comparar contra la referencia', 'm3.p': 'Diez bandas de octava, inclinación, amplitud estéreo y balance izquierda y derecha.',
-      'm4.t': 'Ajustar y volver a medir', 'm4.p': 'Nueve pasadas de render para German Concert V2. Una detectó un desbalance de 7 dB a la izquierda antes de publicarlo.',
-      'presets.title': 'Qué incluye el paquete', g1: 'Calibrados contra una referencia', g2: 'Keyscape', g3: 'Omnisphere', g4: 'Curvas de velocidad',
-      'install.title': 'Instalado en un minuto', 's1.t': 'Descargar', 's1.p': 'Baja el zip desde GitHub y descomprímelo.',
-      's2.t': 'Copiar', 's2.p': 'Pon cada carpeta en tu librería de usuario de Spectrasonics.', 's3.t': 'Actualizar', 's3.p': 'Dale Refresh Library en el navegador del plugin.',
-      copy: 'Copiar ruta', copied: 'Copiado',
-      'foot.req': 'Requiere copias con licencia de Spectrasonics Keyscape y/u Omnisphere. Son solo ajustes, sin muestras.',
-      'foot.tm': 'Sin afiliación con Spectrasonics, Yamaha, Nord ni Roland. Los nombres de producto pertenecen a sus dueños y solo se usan para describir las grabaciones de referencia.',
-      play: 'Reproducir', pause: 'Pausar', lang: 'Switch to English'
-    }
-  };
+  /* ---------- i18n: system language picks the default, the toggle overrides it ---------- */
+  const T = window.RK_LOCALES; // UI strings live in locales/*.js
   const sys = (navigator.languages || [navigator.language || 'en']).some(l => /^es\b/i.test(l)) ? 'es' : 'en';
   let lang = store.get('rk-lang') || sys;
   const t = k => T[lang][k] ?? T.en[k] ?? k;
