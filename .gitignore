@@ -1,0 +1,8 @@
+private/
+.DS_Store
+__pycache__/
+*.pyc
+tools/render/render
+tools/render/probe
+tools/midi/velmeter
+.venv/

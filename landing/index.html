@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReferenceKeys</title>
+<meta name="description" content="Keyscape and Omnisphere piano presets, calibrated band by band against reference recordings of real concert grands.">
+<meta property="og:title" content="ReferenceKeys">
+<meta property="og:description" content="Piano presets, calibrated against the real thing.">
+<meta name="color-scheme" content="light dark">
+<link rel="preload" href="assets/fonts/geist-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+<header class="nav" id="top">
+  <div class="wrap nav__in">
+    <a class="brand" href="#top" aria-label="ReferenceKeys">
+      <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span>ReferenceKeys</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#compare" data-i18n="nav.compare">Compare</a>
+      <a href="#listen" data-i18n="nav.listen">Listen</a>
+      <a href="#method" data-i18n="nav.method">Method</a>
+      <a href="#presets" data-i18n="nav.presets">Presets</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="lang" id="lang" type="button" aria-label="Switch language"><span class="icon i-translate" aria-hidden="true"></span><span id="langLabel">ES</span></button>
+      <a class="btn btn--accent btn--sm js-download" href="#"><span class="icon i-download" aria-hidden="true"></span><span data-i18n="cta.download">Download presets</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO: asymmetric split, real spectrogram of a rendered performance -->
+  <section class="hero wrap">
+    <div class="hero__copy">
+      <h1 class="hero__title reveal-load" data-i18n="hero.title">Piano presets, calibrated against <em>the real thing.</em></h1>
+      <p class="hero__sub reveal-load" data-i18n="hero.sub">Keyscape and Omnisphere patches tuned by measurement, matched band by band to recordings of real concert grands.</p>
+      <div class="hero__ctas reveal-load">
+        <a class="btn btn--accent js-download" href="#"><span class="icon i-download" aria-hidden="true"></span><span data-i18n="cta.download">Download presets</span></a>
+        <a class="btn btn--ghost" href="#listen"><span class="icon i-waveform" aria-hidden="true"></span><span data-i18n="cta.listen">Listen</span></a>
+      </div>
+    </div>
+    <figure class="hero__media reveal-load">
+      <div class="spec" id="spec">
+        <canvas id="specCanvas" aria-hidden="true"></canvas>
+        <div class="spec__head" id="specHead" aria-hidden="true"></div>
+        <button class="spec__play" id="specPlay" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button>
+        <div class="spec__axis" aria-hidden="true"><span>4k</span><span>1k</span><span>250</span><span>60 Hz</span></div>
+      </div>
+      <figcaption class="hero__cap" data-i18n="hero.cap">CZ German Concert V2, rendered from my own performance. Tap to play.</figcaption>
+    </figure>
+  </section>
+
+  <!-- PROOF: real measured numbers, no cards -->
+  <section class="proof wrap" aria-label="Measurements">
+    <div class="proof__item reveal"><b class="num">±3<small> dB</small></b><span data-i18n="proof.1">Royal 3D vs the Nord, every octave from 32 Hz to 8 kHz</span></div>
+    <div class="proof__item reveal"><b class="num">469<small> / 477 Hz</small></b><span data-i18n="proof.2">German Concert V2 brightness center vs the Roland</span></div>
+    <div class="proof__item reveal"><b class="num">0.06<small> dB</small></b><span data-i18n="proof.3">Left and right balance after the fix</span></div>
+    <div class="proof__item reveal"><b class="num">19<small> to </small>111</b><span data-i18n="proof.4">Velocities measured on a Yamaha MX88</span></div>
+  </section>
+
+  <!-- COMPARE: interactive octave-band chart -->
+  <section class="compare wrap" id="compare">
+    <p class="eyebrow" data-i18n="compare.eyebrow">Measured, not guessed</p>
+    <h2 class="h2 reveal" data-i18n="compare.title">Watch the gap close.</h2>
+    <p class="lead reveal" data-i18n="compare.lead">Each line is the tonal balance of a recording, octave by octave. The goal is the reference line.</p>
+    <div class="tabs reveal" role="tablist" aria-label="Preset">
+      <button role="tab" class="tab" data-set="german" aria-selected="true">German Concert V2</button>
+      <button role="tab" class="tab" data-set="royal" aria-selected="false">Royal 3D Grand</button>
+      <button role="tab" class="tab" data-set="cfx" aria-selected="false">CFX Concert</button>
+    </div>
+    <div class="board reveal">
+      <div class="chart">
+        <svg id="chart" viewBox="0 0 760 360" role="img" aria-labelledby="chartDesc">
+          <desc id="chartDesc">Octave band levels of the reference, the first version and the calibrated version.</desc>
+        </svg>
+        <div class="legend">
+          <span class="lg lg--ref"><i></i><b id="refName">Roland German Concert</b></span>
+          <span class="lg lg--before"><i></i><b data-i18n="legend.before">First version</b></span>
+          <span class="lg lg--after"><i></i><b data-i18n="legend.after">Calibrated</b></span>
+        </div>
+      </div>
+      <dl class="metrics" id="metrics"></dl>
+    </div>
+    <p class="note" id="setNote"></p>
+  </section>
+
+  <!-- LISTEN: A/B console -->
+  <section class="listen" id="listen">
+    <div class="wrap">
+      <h2 class="h2 reveal" data-i18n="listen.title">Same performance. Two patches.</h2>
+      <p class="lead reveal" data-i18n="listen.lead">One MIDI take rendered through both versions of German Concert. Switch while it plays: only the patch changes.</p>
+      <div class="ab reveal" id="ab">
+        <button class="ab__play" id="abPlay" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button>
+        <div class="ab__body">
+          <canvas class="wave" id="abWave" aria-hidden="true"></canvas>
+          <div class="ab__row">
+            <div class="seg" role="group" aria-label="Version">
+              <button type="button" class="seg__btn" data-v="german-v1" aria-pressed="false">V1</button>
+              <button type="button" class="seg__btn" data-v="german-v2" aria-pressed="true">V2</button>
+            </div>
+            <span class="ab__time num" id="abTime">0:00 / 1:04</span>
+          </div>
+        </div>
+      </div>
+      <div class="takes">
+        <h3 class="h3 reveal" data-i18n="takes.title">Live takes on my MX88</h3>
+        <p class="lead lead--sm reveal" data-i18n="takes.lead">Different performances, so listen for the tone, not the notes.</p>
+        <div class="takes__grid">
+          <article class="take reveal" data-src="royal-v1"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>Royal 3D Grand</b><span data-i18n="take.before">Before</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
+          <article class="take reveal" data-src="royal-v3"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>Royal 3D Grand</b><span data-i18n="take.after">Calibrated</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
+          <article class="take reveal" data-src="cfx-v1"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>CFX Concert</b><span data-i18n="take.before">Before</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
+          <article class="take reveal" data-src="cfx-v2"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>CFX Concert</b><span data-i18n="take.mid">Second pass</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD: bento, 4 items, 4 cells -->
+  <section class="method wrap" id="method">
+    <h2 class="h2 reveal" data-i18n="method.title">How a preset gets calibrated</h2>
+    <div class="bento">
+      <article class="cell cell--vel reveal">
+        <h3 class="h3" data-i18n="m1.t">Measure the player</h3>
+        <p data-i18n="m1.p">Four rounds of pp to ff on the MX88 set the velocity curve, so soft really means soft.</p>
+        <canvas id="velChart" aria-label="MX88 Wide velocity curve" role="img"></canvas>
+      </article>
+      <article class="cell cell--accent reveal">
+        <h3 class="h3" data-i18n="m2.t">Render the same take</h3>
+        <p data-i18n="m2.p">MIDI goes through the Keyscape plugin offline. Every render is bit-identical, so any change you hear is the patch.</p>
+      </article>
+      <article class="cell cell--spec reveal">
+        <h3 class="h3" data-i18n="m3.t">Compare against the reference</h3>
+        <p data-i18n="m3.p">Ten octave bands, tilt, stereo width and left and right balance.</p>
+        <canvas id="miniSpec" aria-hidden="true"></canvas>
+      </article>
+      <article class="cell cell--tune reveal">
+        <h3 class="h3" data-i18n="m4.t">Tune, then check again</h3>
+        <p data-i18n="m4.p">Nine render passes for German Concert V2. One of them caught a 7 dB lean to the left before it shipped.</p>
+        <ul class="knobs num" aria-label="German Concert V2 changes">
+          <li><span>Lo Boost</span><b>0.25 <i class="icon i-arrow-right" aria-hidden="true"></i> 0</b></li>
+          <li><span>Hi Freq</span><b>18k <i class="icon i-arrow-right" aria-hidden="true"></i> 8k</b></li>
+          <li><span>Hi Boost</span><b>0.78 <i class="icon i-arrow-right" aria-hidden="true"></i> 0.55</b></li>
+          <li><span>Width</span><b>0.51 <i class="icon i-arrow-right" aria-hidden="true"></i> 0.45</b></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- PRESETS: grouped chip clusters -->
+  <section class="presets wrap" id="presets">
+    <h2 class="h2 reveal" data-i18n="presets.title">What's in the pack</h2>
+    <div class="groups">
+      <div class="group reveal">
+        <h3 class="h3" data-i18n="g1">Calibrated against a reference</h3>
+        <ul class="chips chips--hot"><li>CZ German Concert V2</li><li>CZ CFX Concert</li><li>CZ Royal 3D Grand</li></ul>
+      </div>
+      <div class="group reveal">
+        <h3 class="h3" data-i18n="g2">Keyscape</h3>
+        <ul class="chips"><li>CZ German Concert</li><li>CZ C7 Grand Piano</li><li>CZ LA Custom C7</li><li>CZ Stage Grand</li><li>CZ White Grand</li><li>CZ Velvet Grand</li><li>CZ Center Cinematic</li></ul>
+      </div>
+      <div class="group reveal">
+        <h3 class="h3" data-i18n="g3">Omnisphere</h3>
+        <ul class="chips"><li>CZ Royal 3D + Pad</li><li>CZ Rich Ballad</li><li>CZ Mk I Bright Dyno</li><li>CZ Mk I Suitcase</li><li>CZ Wurli 200A</li></ul>
+      </div>
+      <div class="group reveal">
+        <h3 class="h3" data-i18n="g4">Velocity curves</h3>
+        <ul class="chips"><li>MX88 Wide</li><li>MX88 Normal</li><li>MX88</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="install" id="install">
+    <div class="wrap install__in">
+      <div>
+        <h2 class="h2 reveal" data-i18n="install.title">Installed in a minute</h2>
+        <ol class="steps reveal">
+          <li><b data-i18n="s1.t">Download</b><span data-i18n="s1.p">Grab the zip from GitHub and unpack it.</span></li>
+          <li><b data-i18n="s2.t">Copy</b><span data-i18n="s2.p">Drop each folder into your Spectrasonics user library.</span></li>
+          <li><b data-i18n="s3.t">Refresh</b><span data-i18n="s3.p">Hit Refresh Library in the plugin browser.</span></li>
+        </ol>
+        <a class="btn btn--accent js-download reveal" href="#"><span class="icon i-download" aria-hidden="true"></span><span data-i18n="cta.download">Download presets</span></a>
+      </div>
+      <div class="code reveal">
+        <button class="code__copy" id="copyPath" type="button" data-i18n="copy">Copy path</button>
+<pre id="pathBlock">~/Library/Application Support/Spectrasonics/STEAM/
+  Keyscape/Settings Library/Patches/User/My Patches/
+  Omnisphere/Settings Library/Patches/User/
+  Omnisphere/Settings Library/Multis/User/
+  */Settings Library/Presets/User/Velocity Curve/</pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p data-i18n="foot.req">Requires licensed copies of Spectrasonics Keyscape and/or Omnisphere. These are settings only, no samples.</p>
+    <p class="foot__small" data-i18n="foot.tm">Not affiliated with Spectrasonics, Yamaha, Nord or Roland. Product names belong to their owners and are used only to describe the reference recordings.</p>
+    <div class="foot__row">
+      <span>Carlos Zaragoza</span>
+      <a class="foot__gh js-repo" href="#"><span class="icon i-github" aria-hidden="true"></span>GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<audio id="player" preload="none"></audio>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

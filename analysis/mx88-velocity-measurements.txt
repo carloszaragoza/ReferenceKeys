@@ -1,0 +1,3 @@
+Yamaha MX88 measurements, keyboard set to Wide (2026-11-12). Medians: pp=19 p=28 mf=48 f=87 (p75 104, max 111)
+MX88 Wide: vcx=0.49 vcy=0.88 (quadratic Bezier control point)
+Raw velocities per round: round1.txt to round4.txt
