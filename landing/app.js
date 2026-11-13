@@ -251,8 +251,7 @@
     const m = [
       ['m.tilt', 'tilt', v => `${v.toFixed(1)} dB/oct`],
       ['m.centroid', 'centroid', v => `${v} Hz`],
-      ['m.width', 'width', v => v.toFixed(2)],
-      ['m.balance', 'balance', v => `${v > 0 ? '+' : ''}${v.toFixed(2)} dB`]
+      ['m.width', 'width', v => v.toFixed(2)]
     ];
     $('#metrics').innerHTML = m.map(([lab, key, f]) => `<div class="metric"><dt>${t(lab)}</dt><dd><span class="v-after">${f(s.after[key])}</span><span class="v-before">${f(s.before[key])}</span><span class="v-ref">${t('m.ref')} ${f(s.ref[key])}</span></dd></div>`).join('');
     $('#setNote').textContent = t('note.' + k);

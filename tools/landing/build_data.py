@@ -20,7 +20,7 @@ def feats(sr,x):
     cen=(P*f).sum()/P.sum()
     sm=np.sqrt(np.mean(((L-R)/2)**2))/np.sqrt(np.mean(M**2))
     bal=10*np.log10(np.mean(L**2)/np.mean(R**2))
-    return dict(bands=[round(float(v),1) for v in lv],tilt=round(float(tilt),1),centroid=int(cen),width=round(float(sm),2),balance=round(float(bal),2))
+    return dict(bands=[round(float(v),1) for v in lv],tilt=round(float(tilt),1),centroid=int(cen),width=round(float(sm),2))
 P='private/'
 SETS={
  'german':dict(ref=(P+'reference-audio/Roland German Concert demo.wav',[(0,1),(128,999)]),
@@ -55,5 +55,5 @@ cols=min(img.shape[1],420); img=img[::-1,:cols]
 D['spec']=dict(w=cols,h=rows,data=base64.b64encode((img*255).astype(np.uint8).tobytes()).decode())
 D['mx88']=dict(pp=19,p=28,mf=48,f=87,max=111,vcx=0.49,vcy=0.88)
 open('landing/data.js','w').write('window.RK_DATA='+json.dumps(D,separators=(',',':'))+';\n')
-for k,v in D['sets'].items(): print(k,{n:(x['tilt'],x['centroid'],x['width'],x['balance']) for n,x in v.items()})
+for k,v in D['sets'].items(): print(k,{n:(x['tilt'],x['centroid'],x['width']) for n,x in v.items()})
 print('spec',cols,rows)
