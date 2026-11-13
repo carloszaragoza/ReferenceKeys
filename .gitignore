@@ -6,3 +6,4 @@ tools/render/render
 tools/render/probe
 tools/midi/velmeter
 .venv/
+.impeccable/hook.cache.json

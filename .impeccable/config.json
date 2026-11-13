@@ -1,0 +1,32 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "landing/index.html"
+        ],
+        "createdAt": "2026-11-13T11:35:22.281Z",
+        "reason": "Claude: static false positives (proof__item, listen); measured in Chrome, content insets are 21px and 16-40px gutters"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "landing/index.html"
+        ],
+        "createdAt": "2026-11-13T11:35:22.298Z",
+        "reason": "Claude: static scan cannot resolve clamp() tokens; measured h1 212px, h2 74px, h3 18px, body 16px"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist mono",
+        "createdAt": "2026-11-13T11:35:22.314Z",
+        "reason": "Claude: intentional; Geist Mono is the functional numeric face, brand personality comes from Big Shoulders Display (see landing/DESIGN.md)"
+      }
+    ]
+  }
+}

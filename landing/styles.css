@@ -94,7 +94,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .proof__item{padding:0 20px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
 .proof__item:first-child{border-left:0;padding-left:0}
 .proof__item b{font-size:var(--t-stat);font-weight:500;letter-spacing:-.03em;line-height:1}
-.proof__item b small{font-size:.5em;color:var(--muted);letter-spacing:0}
+.proof__item b small{font-size:var(--t-small);color:var(--muted);letter-spacing:0}
 .proof__item span{font-size:var(--t-small);color:var(--muted);max-width:26ch}
 @media (max-width:860px){.proof{grid-template-columns:1fr 1fr;row-gap:28px}.proof__item:nth-child(3){border-left:0;padding-left:0}}
 @media (max-width:480px){.proof{grid-template-columns:1fr}.proof__item{border-left:0;padding-left:0}}
@@ -232,9 +232,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .story__visual svg{width:100%;height:auto;overflow:visible}
 .story__visual .ln{fill:none;stroke-linecap:round;stroke-linejoin:round;transition:opacity .6s var(--ease)}
 .story__steps{list-style:none;margin:0;padding:0}
-.step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;opacity:.32;transition:opacity .5s var(--ease)}
-.step.is-active{opacity:1}
-.step p{color:var(--muted);margin:0;max-width:42ch}
+/* inactive steps recede by color, not opacity, so every step stays AA readable */
+.step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;color:var(--muted);transition:color var(--dur-2) var(--ease)}
+.step.is-active{color:var(--ink)}
+.step p{color:var(--faint);margin:0;max-width:42ch;transition:color var(--dur-2) var(--ease)}
+.step.is-active p{color:var(--muted)}
 .step .h3{font-size:var(--t-h3-lg);letter-spacing:-.02em;margin-bottom:12px}
 .meter{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;margin-top:18px;font:12px var(--mono);color:var(--faint)}
 .meter__track{position:relative;height:10px;border-radius:var(--pill);background:var(--bg);border:1px solid var(--line)}
