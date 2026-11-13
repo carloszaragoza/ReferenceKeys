@@ -1,7 +1,7 @@
 /* ReferenceKeys landing. Vanilla JS, no build step (GitHub Pages). */
 (() => {
   const REPO = 'https://github.com/carloszaragoza/ReferenceKeys';
-  const DOWNLOAD = REPO + '/archive/refs/heads/main.zip';
+  const DOWNLOAD = REPO + '/releases/latest/download/ReferenceKeys.zip';
   const D = window.RK_DATA;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];

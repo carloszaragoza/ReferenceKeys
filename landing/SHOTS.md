@@ -81,11 +81,7 @@ Merges the current story, compare and takes sections.
 - **Reduced motion:** each shot becomes a still frame.
 - **Phone:** the same shots with vertical framing.
 
-## Download
-Today the button downloads the whole repository (15 presets). Replace it with a GitHub Release ZIP containing
-only the three presets, the MX88 velocity curves (pending decision) and an install README. The Keyscape and
-Omnisphere lists leave the page.
-
-## Open decisions
-1. MX88 velocity curves: in the ZIP with the three presets?
-2. The other 12 presets: removed from the repository, or only from the page and the download?
+## Download **(live)**
+The button downloads `ReferenceKeys.zip` from the latest GitHub Release: the three presets, the MX88 velocity
+curves and `INSTALL.txt`. Built by `tools/release/make_pack.sh`. The other twelve patches live in `in-progress/`
+until they are polished, and are not on the page or in the ZIP.
