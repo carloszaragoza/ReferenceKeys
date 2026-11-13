@@ -83,7 +83,7 @@ window.RK_LOCALES.es = {
   "live.now": "Sonando ahora",
   "live.other": "La otra versión",
   "live.gap": "de diferencia promedio con el Roland",
-  "foot.photos": "Fotos: Kimberleigh Aleksandre (martillos), Hans Braxmeier (teclas) y Kjethdubns (cuerdas), dominio público (CC0) vía Wikimedia Commons.",
+  "foot.photos": "Ilustraciones: dibujos vectoriales hechos para este proyecto con tools/landing/draw_art.py.",
   "gate.eyebrow": "Una sala de escucha para presets de piano",
   "gate.t1": "¿Audífonos",
   "gate.t2": "puestos?",
@@ -100,5 +100,6 @@ window.RK_LOCALES.es = {
   "sr.live": "En vivo",
   "404.t": "Desafinado.",
   "404.p": "Esta página no existe. Los presets sí.",
-  "404.cta": "Volver a ReferenceKeys"
+  "404.cta": "Volver a ReferenceKeys",
+  "foot.ds": "Sistema de diseño"
 };

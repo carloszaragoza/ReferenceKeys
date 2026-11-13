@@ -1,0 +1,393 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 720" role="img" aria-label="Close-up of piano strings, tuning pins and the red felt"><style>.l,.l2,.l3,.o,.ao{fill:none;stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}.l{stroke:#141416}.l2{stroke:#141416;stroke-opacity:.5}.l3{stroke:#141416;stroke-opacity:.22}.o{fill:#f3f3f1;stroke:#141416}.a{fill:#e4492b}.ao{stroke:#e4492b;stroke-width:1.6}.d{fill:#141416}.k{fill:#141416;stroke:#141416;stroke-width:1.2;vector-effect:non-scaling-stroke}.dash{stroke-dasharray:3 5}@media (prefers-color-scheme:dark){.l,.l2,.l3,.o,.ao{fill:none;stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}.l{stroke:#ecece8}.l2{stroke:#ecece8;stroke-opacity:.5}.l3{stroke:#ecece8;stroke-opacity:.22}.o{fill:#0f0f11;stroke:#ecece8}.a{fill:#ff5d3d}.ao{stroke:#ff5d3d;stroke-width:1.6}.d{fill:#ecece8}.k{fill:#2a2a30;stroke:#ecece8;stroke-width:1.2;vector-effect:non-scaling-stroke}.dash{stroke-dasharray:3 5}}</style>
+<path class="a" d="M330 0C342 180 318 420 338 720L372 720C352 420 378 180 366 0Z"/>
+<path class="l3" d="M99 36.6L1680 4.3"/>
+<path class="l2" d="M145 40L1680 8"/>
+<path class="l3" d="M191 43.4L1680 11.7"/>
+<path class="l3" d="M119 61.2L1680 31.3"/>
+<path class="l2" d="M165 64.6L1680 35.1"/>
+<path class="l3" d="M211 68L1680 38.8"/>
+<path class="l3" d="M99 85.8L1680 58.4"/>
+<path class="l2" d="M145 89.2L1680 62.2"/>
+<path class="l3" d="M191 92.6L1680 65.9"/>
+<path class="l3" d="M119 110.4L1680 85.5"/>
+<path class="l2" d="M165 113.8L1680 89.2"/>
+<path class="l3" d="M211 117.2L1680 93"/>
+<path class="l3" d="M99 135.1L1680 112.6"/>
+<path class="l2" d="M145 138.5L1680 116.3"/>
+<path class="l3" d="M191 141.9L1680 120"/>
+<path class="l3" d="M119 159.7L1680 139.6"/>
+<path class="l2" d="M165 163.1L1680 143.4"/>
+<path class="l3" d="M211 166.5L1680 147.1"/>
+<path class="l3" d="M99 184.3L1680 166.7"/>
+<path class="l2" d="M145 187.7L1680 170.5"/>
+<path class="l3" d="M191 191.1L1680 174.2"/>
+<path class="l3" d="M119 208.9L1680 193.8"/>
+<path class="l2" d="M165 212.3L1680 197.5"/>
+<path class="l3" d="M211 215.7L1680 201.3"/>
+<path class="l3" d="M99 233.5L1680 220.9"/>
+<path class="l2" d="M145 236.9L1680 224.6"/>
+<path class="l3" d="M191 240.3L1680 228.4"/>
+<path class="l3" d="M119 258.1L1680 248"/>
+<path class="l2" d="M165 261.5L1680 251.7"/>
+<path class="l3" d="M211 264.9L1680 255.4"/>
+<path class="l3" d="M99 282.8L1680 275"/>
+<path class="l2" d="M145 286.2L1680 278.8"/>
+<path class="l3" d="M191 289.6L1680 282.5"/>
+<path class="l3" d="M119 307.4L1680 302.1"/>
+<path class="l2" d="M165 310.8L1680 305.8"/>
+<path class="l3" d="M211 314.2L1680 309.6"/>
+<path class="l3" d="M99 332L1680 329.2"/>
+<path class="l2" d="M145 335.4L1680 332.9"/>
+<path class="l3" d="M191 338.8L1680 336.7"/>
+<path class="l3" d="M119 356.6L1680 356.3"/>
+<path class="l2" d="M165 360L1680 360"/>
+<path class="l3" d="M211 363.4L1680 363.7"/>
+<path class="l3" d="M99 381.2L1680 383.3"/>
+<path class="l2" d="M145 384.6L1680 387.1"/>
+<path class="l3" d="M191 388L1680 390.8"/>
+<path class="l3" d="M119 405.8L1680 410.4"/>
+<path class="l2" d="M165 409.2L1680 414.2"/>
+<path class="l3" d="M211 412.6L1680 417.9"/>
+<path class="l3" d="M99 430.4L1680 437.5"/>
+<path class="l2" d="M145 433.8L1680 441.2"/>
+<path class="l3" d="M191 437.2L1680 445"/>
+<path class="l3" d="M119 455.1L1680 464.6"/>
+<path class="l2" d="M165 458.5L1680 468.3"/>
+<path class="l3" d="M211 461.9L1680 472"/>
+<path class="l3" d="M99 479.7L1680 491.6"/>
+<path class="l2" d="M145 483.1L1680 495.4"/>
+<path class="l3" d="M191 486.5L1680 499.1"/>
+<path class="l3" d="M119 504.3L1680 518.7"/>
+<path class="l2" d="M165 507.7L1680 522.5"/>
+<path class="l3" d="M211 511.1L1680 526.2"/>
+<path class="l3" d="M99 528.9L1680 545.8"/>
+<path class="l2" d="M145 532.3L1680 549.5"/>
+<path class="l3" d="M191 535.7L1680 553.3"/>
+<path class="l3" d="M119 553.5L1680 572.9"/>
+<path class="l2" d="M165 556.9L1680 576.6"/>
+<path class="l3" d="M211 560.3L1680 580.4"/>
+<path class="l3" d="M99 578.1L1680 600"/>
+<path class="l2" d="M145 581.5L1680 603.7"/>
+<path class="l3" d="M191 584.9L1680 607.4"/>
+<path class="l3" d="M119 602.8L1680 627"/>
+<path class="l2" d="M165 606.2L1680 630.8"/>
+<path class="l3" d="M211 609.6L1680 634.5"/>
+<path class="l3" d="M99 627.4L1680 654.1"/>
+<path class="l2" d="M145 630.8L1680 657.8"/>
+<path class="l3" d="M191 634.2L1680 661.6"/>
+<path class="l3" d="M119 652L1680 681.2"/>
+<path class="l2" d="M165 655.4L1680 684.9"/>
+<path class="l3" d="M211 658.8L1680 688.7"/>
+<circle class="o" cx="92" cy="36.6" r="7"/>
+<circle class="d" cx="92" cy="36.6" r="2.2"/>
+<path class="l2" d="M96 31.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="40" r="7"/>
+<circle class="d" cx="138" cy="40" r="2.2"/>
+<path class="l2" d="M142 35a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="43.4" r="7"/>
+<circle class="d" cx="184" cy="43.4" r="2.2"/>
+<path class="l2" d="M188 38.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="61.2" r="7"/>
+<circle class="d" cx="112" cy="61.2" r="2.2"/>
+<path class="l2" d="M116 56.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="64.6" r="7"/>
+<circle class="d" cx="158" cy="64.6" r="2.2"/>
+<path class="l2" d="M162 59.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="68" r="7"/>
+<circle class="d" cx="204" cy="68" r="2.2"/>
+<path class="l2" d="M208 63a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="85.8" r="7"/>
+<circle class="d" cx="92" cy="85.8" r="2.2"/>
+<path class="l2" d="M96 80.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="89.2" r="7"/>
+<circle class="d" cx="138" cy="89.2" r="2.2"/>
+<path class="l2" d="M142 84.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="92.6" r="7"/>
+<circle class="d" cx="184" cy="92.6" r="2.2"/>
+<path class="l2" d="M188 87.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="110.4" r="7"/>
+<circle class="d" cx="112" cy="110.4" r="2.2"/>
+<path class="l2" d="M116 105.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="113.8" r="7"/>
+<circle class="d" cx="158" cy="113.8" r="2.2"/>
+<path class="l2" d="M162 108.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="117.2" r="7"/>
+<circle class="d" cx="204" cy="117.2" r="2.2"/>
+<path class="l2" d="M208 112.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="135.1" r="7"/>
+<circle class="d" cx="92" cy="135.1" r="2.2"/>
+<path class="l2" d="M96 130.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="138.5" r="7"/>
+<circle class="d" cx="138" cy="138.5" r="2.2"/>
+<path class="l2" d="M142 133.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="141.9" r="7"/>
+<circle class="d" cx="184" cy="141.9" r="2.2"/>
+<path class="l2" d="M188 136.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="159.7" r="7"/>
+<circle class="d" cx="112" cy="159.7" r="2.2"/>
+<path class="l2" d="M116 154.7a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="163.1" r="7"/>
+<circle class="d" cx="158" cy="163.1" r="2.2"/>
+<path class="l2" d="M162 158.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="166.5" r="7"/>
+<circle class="d" cx="204" cy="166.5" r="2.2"/>
+<path class="l2" d="M208 161.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="184.3" r="7"/>
+<circle class="d" cx="92" cy="184.3" r="2.2"/>
+<path class="l2" d="M96 179.3a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="187.7" r="7"/>
+<circle class="d" cx="138" cy="187.7" r="2.2"/>
+<path class="l2" d="M142 182.7a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="191.1" r="7"/>
+<circle class="d" cx="184" cy="191.1" r="2.2"/>
+<path class="l2" d="M188 186.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="208.9" r="7"/>
+<circle class="d" cx="112" cy="208.9" r="2.2"/>
+<path class="l2" d="M116 203.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="212.3" r="7"/>
+<circle class="d" cx="158" cy="212.3" r="2.2"/>
+<path class="l2" d="M162 207.3a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="215.7" r="7"/>
+<circle class="d" cx="204" cy="215.7" r="2.2"/>
+<path class="l2" d="M208 210.7a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="233.5" r="7"/>
+<circle class="d" cx="92" cy="233.5" r="2.2"/>
+<path class="l2" d="M96 228.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="236.9" r="7"/>
+<circle class="d" cx="138" cy="236.9" r="2.2"/>
+<path class="l2" d="M142 231.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="240.3" r="7"/>
+<circle class="d" cx="184" cy="240.3" r="2.2"/>
+<path class="l2" d="M188 235.3a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="258.1" r="7"/>
+<circle class="d" cx="112" cy="258.1" r="2.2"/>
+<path class="l2" d="M116 253.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="261.5" r="7"/>
+<circle class="d" cx="158" cy="261.5" r="2.2"/>
+<path class="l2" d="M162 256.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="264.9" r="7"/>
+<circle class="d" cx="204" cy="264.9" r="2.2"/>
+<path class="l2" d="M208 259.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="282.8" r="7"/>
+<circle class="d" cx="92" cy="282.8" r="2.2"/>
+<path class="l2" d="M96 277.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="286.2" r="7"/>
+<circle class="d" cx="138" cy="286.2" r="2.2"/>
+<path class="l2" d="M142 281.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="289.6" r="7"/>
+<circle class="d" cx="184" cy="289.6" r="2.2"/>
+<path class="l2" d="M188 284.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="307.4" r="7"/>
+<circle class="d" cx="112" cy="307.4" r="2.2"/>
+<path class="l2" d="M116 302.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="310.8" r="7"/>
+<circle class="d" cx="158" cy="310.8" r="2.2"/>
+<path class="l2" d="M162 305.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="314.2" r="7"/>
+<circle class="d" cx="204" cy="314.2" r="2.2"/>
+<path class="l2" d="M208 309.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="332" r="7"/>
+<circle class="d" cx="92" cy="332" r="2.2"/>
+<path class="l2" d="M96 327a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="335.4" r="7"/>
+<circle class="d" cx="138" cy="335.4" r="2.2"/>
+<path class="l2" d="M142 330.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="338.8" r="7"/>
+<circle class="d" cx="184" cy="338.8" r="2.2"/>
+<path class="l2" d="M188 333.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="356.6" r="7"/>
+<circle class="d" cx="112" cy="356.6" r="2.2"/>
+<path class="l2" d="M116 351.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="360" r="7"/>
+<circle class="d" cx="158" cy="360" r="2.2"/>
+<path class="l2" d="M162 355a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="363.4" r="7"/>
+<circle class="d" cx="204" cy="363.4" r="2.2"/>
+<path class="l2" d="M208 358.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="381.2" r="7"/>
+<circle class="d" cx="92" cy="381.2" r="2.2"/>
+<path class="l2" d="M96 376.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="384.6" r="7"/>
+<circle class="d" cx="138" cy="384.6" r="2.2"/>
+<path class="l2" d="M142 379.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="388" r="7"/>
+<circle class="d" cx="184" cy="388" r="2.2"/>
+<path class="l2" d="M188 383a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="405.8" r="7"/>
+<circle class="d" cx="112" cy="405.8" r="2.2"/>
+<path class="l2" d="M116 400.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="409.2" r="7"/>
+<circle class="d" cx="158" cy="409.2" r="2.2"/>
+<path class="l2" d="M162 404.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="412.6" r="7"/>
+<circle class="d" cx="204" cy="412.6" r="2.2"/>
+<path class="l2" d="M208 407.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="430.4" r="7"/>
+<circle class="d" cx="92" cy="430.4" r="2.2"/>
+<path class="l2" d="M96 425.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="433.8" r="7"/>
+<circle class="d" cx="138" cy="433.8" r="2.2"/>
+<path class="l2" d="M142 428.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="437.2" r="7"/>
+<circle class="d" cx="184" cy="437.2" r="2.2"/>
+<path class="l2" d="M188 432.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="455.1" r="7"/>
+<circle class="d" cx="112" cy="455.1" r="2.2"/>
+<path class="l2" d="M116 450.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="458.5" r="7"/>
+<circle class="d" cx="158" cy="458.5" r="2.2"/>
+<path class="l2" d="M162 453.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="461.9" r="7"/>
+<circle class="d" cx="204" cy="461.9" r="2.2"/>
+<path class="l2" d="M208 456.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="479.7" r="7"/>
+<circle class="d" cx="92" cy="479.7" r="2.2"/>
+<path class="l2" d="M96 474.7a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="483.1" r="7"/>
+<circle class="d" cx="138" cy="483.1" r="2.2"/>
+<path class="l2" d="M142 478.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="486.5" r="7"/>
+<circle class="d" cx="184" cy="486.5" r="2.2"/>
+<path class="l2" d="M188 481.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="504.3" r="7"/>
+<circle class="d" cx="112" cy="504.3" r="2.2"/>
+<path class="l2" d="M116 499.3a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="507.7" r="7"/>
+<circle class="d" cx="158" cy="507.7" r="2.2"/>
+<path class="l2" d="M162 502.7a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="511.1" r="7"/>
+<circle class="d" cx="204" cy="511.1" r="2.2"/>
+<path class="l2" d="M208 506.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="528.9" r="7"/>
+<circle class="d" cx="92" cy="528.9" r="2.2"/>
+<path class="l2" d="M96 523.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="532.3" r="7"/>
+<circle class="d" cx="138" cy="532.3" r="2.2"/>
+<path class="l2" d="M142 527.3a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="535.7" r="7"/>
+<circle class="d" cx="184" cy="535.7" r="2.2"/>
+<path class="l2" d="M188 530.7a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="553.5" r="7"/>
+<circle class="d" cx="112" cy="553.5" r="2.2"/>
+<path class="l2" d="M116 548.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="556.9" r="7"/>
+<circle class="d" cx="158" cy="556.9" r="2.2"/>
+<path class="l2" d="M162 551.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="560.3" r="7"/>
+<circle class="d" cx="204" cy="560.3" r="2.2"/>
+<path class="l2" d="M208 555.3a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="578.1" r="7"/>
+<circle class="d" cx="92" cy="578.1" r="2.2"/>
+<path class="l2" d="M96 573.1a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="581.5" r="7"/>
+<circle class="d" cx="138" cy="581.5" r="2.2"/>
+<path class="l2" d="M142 576.5a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="584.9" r="7"/>
+<circle class="d" cx="184" cy="584.9" r="2.2"/>
+<path class="l2" d="M188 579.9a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="602.8" r="7"/>
+<circle class="d" cx="112" cy="602.8" r="2.2"/>
+<path class="l2" d="M116 597.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="606.2" r="7"/>
+<circle class="d" cx="158" cy="606.2" r="2.2"/>
+<path class="l2" d="M162 601.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="609.6" r="7"/>
+<circle class="d" cx="204" cy="609.6" r="2.2"/>
+<path class="l2" d="M208 604.6a6 6 0 0 1 0 10"/>
+<circle class="o" cx="92" cy="627.4" r="7"/>
+<circle class="d" cx="92" cy="627.4" r="2.2"/>
+<path class="l2" d="M96 622.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="138" cy="630.8" r="7"/>
+<circle class="d" cx="138" cy="630.8" r="2.2"/>
+<path class="l2" d="M142 625.8a6 6 0 0 1 0 10"/>
+<circle class="o" cx="184" cy="634.2" r="7"/>
+<circle class="d" cx="184" cy="634.2" r="2.2"/>
+<path class="l2" d="M188 629.2a6 6 0 0 1 0 10"/>
+<circle class="o" cx="112" cy="652" r="7"/>
+<circle class="d" cx="112" cy="652" r="2.2"/>
+<path class="l2" d="M116 647a6 6 0 0 1 0 10"/>
+<circle class="o" cx="158" cy="655.4" r="7"/>
+<circle class="d" cx="158" cy="655.4" r="2.2"/>
+<path class="l2" d="M162 650.4a6 6 0 0 1 0 10"/>
+<circle class="o" cx="204" cy="658.8" r="7"/>
+<circle class="d" cx="204" cy="658.8" r="2.2"/>
+<path class="l2" d="M208 653.8a6 6 0 0 1 0 10"/>
+<rect class="o" x="430" y="-10" width="26" height="740" rx="3"/>
+<circle class="o" cx="443" cy="30" r="5"/>
+<path class="l2" d="M439 27L447 33"/>
+<circle class="o" cx="443" cy="100" r="5"/>
+<path class="l2" d="M439 97L447 103"/>
+<circle class="o" cx="443" cy="170" r="5"/>
+<path class="l2" d="M439 167L447 173"/>
+<circle class="o" cx="443" cy="240" r="5"/>
+<path class="l2" d="M439 237L447 243"/>
+<circle class="o" cx="443" cy="310" r="5"/>
+<path class="l2" d="M439 307L447 313"/>
+<circle class="o" cx="443" cy="380" r="5"/>
+<path class="l2" d="M439 377L447 383"/>
+<circle class="o" cx="443" cy="450" r="5"/>
+<path class="l2" d="M439 447L447 453"/>
+<circle class="o" cx="443" cy="520" r="5"/>
+<path class="l2" d="M439 517L447 523"/>
+<circle class="o" cx="443" cy="590" r="5"/>
+<path class="l2" d="M439 587L447 593"/>
+<circle class="o" cx="443" cy="660" r="5"/>
+<path class="l2" d="M439 657L447 663"/>
+<rect class="o" x="760" y="16.5" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="30.5" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="42.3" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="56.3" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="68" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="82" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="93.7" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="107.7" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="119.4" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="133.4" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="145.2" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="159.2" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="170.9" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="184.9" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="196.6" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="210.6" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="222.4" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="236.4" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="248.1" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="262.1" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="273.8" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="287.8" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="299.5" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="313.5" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="325.3" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="339.3" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="351" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="365" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="376.7" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="390.7" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="402.5" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="416.5" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="428.2" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="442.2" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="453.9" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="467.9" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="479.6" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="493.6" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="505.4" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="519.4" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="531.1" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="545.1" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="556.8" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="570.8" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="582.6" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="596.6" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="608.3" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="622.3" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="634" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="648" width="62" height="4" rx="1.5"/>
+<rect class="o" x="760" y="659.7" width="70" height="18" rx="3"/>
+<rect class="a" x="764" y="673.7" width="62" height="4" rx="1.5"/>
+<path class="o" fill-rule="evenodd" d="M1010 -10C1050 200 1190 300 1690 320L1690 -10ZM1166 120a84 58 0 1 0 168 0a84 58 0 1 0 -168 0ZM1430 168a70 48 0 1 0 140 0a70 48 0 1 0 -140 0Z"/>
+<path class="l3" d="M1040 -10C1078 180 1206 274 1690 292"/>
+<circle class="o" cx="1120" cy="120" r="6"/>
+<circle class="o" cx="1380" cy="250" r="6"/>
+<circle class="o" cx="1620" cy="290" r="6"/>
+</svg>

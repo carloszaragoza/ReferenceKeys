@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Side view of a piano action: the key lifts the hammer into the string"><style>.l,.l2,.l3,.o,.ao{fill:none;stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}.l{stroke:#f4f2ee}.l2{stroke:#f4f2ee;stroke-opacity:.5}.l3{stroke:#f4f2ee;stroke-opacity:.22}.o{fill:#0e0e10;stroke:#f4f2ee}.a{fill:#ff5d3d}.ao{stroke:#ff5d3d;stroke-width:1.6}.d{fill:#f4f2ee}.k{fill:#2a2a30;stroke:#f4f2ee;stroke-width:1.2;vector-effect:non-scaling-stroke}.dash{stroke-dasharray:3 5}</style>
+<path class="l" d="M40 120L770 120"/>
+<circle class="o" cx="56" cy="120" r="9"/>
+<circle class="d" cx="56" cy="120" r="3"/>
+<path class="o" d="M700 120L716 146L684 146Z"/>
+<rect class="o" x="560" y="46" width="58" height="52" rx="4"/>
+<rect class="a" x="564" y="92" width="50" height="8" rx="2"/>
+<path class="l" d="M589 0L589 46"/>
+<path class="l" d="M436 168L250 318"/>
+<circle class="o" cx="250" cy="318" r="10"/>
+<circle class="d" cx="250" cy="318" r="3"/>
+<path class="a" d="M408 150C406 128 420 120 438 121C458 122 470 134 468 152C466 170 452 178 436 177C420 176 410 168 408 150Z"/>
+<path class="l" d="M416 152C415 138 424 132 437 132C450 133 458 141 457 153C456 165 447 170 437 170C425 169 417 163 416 152Z"/>
+<path class="l2 dash" d="M250 318L430 266"/>
+<path class="l2 dash" d="M402 268C400 250 414 244 432 245C452 246 462 258 460 274C458 290 444 296 430 295C414 294 404 286 402 268Z"/>
+<path class="ao" d="M488 262C500 226 496 190 476 160"/>
+<path class="ao" d="M470 166l6 -8l4 10"/>
+<path class="o" d="M200 372L470 352L476 372L206 394Z"/>
+<path class="l" d="M330 362L318 316"/>
+<circle class="o" cx="200" cy="383" r="6"/>
+<path class="o" d="M40 470L760 430L762 458L42 500Z"/>
+<path class="o" d="M400 476L422 514L378 514Z"/>
+<path class="l2" d="M380 380L384 448"/>
+<path class="l" d="M20 540L780 540"/>
+<path class="l3" d="M40 540L28 556"/>
+<path class="l3" d="M64 540L52 556"/>
+<path class="l3" d="M88 540L76 556"/>
+<path class="l3" d="M112 540L100 556"/>
+<path class="l3" d="M136 540L124 556"/>
+<path class="l3" d="M160 540L148 556"/>
+<path class="l3" d="M184 540L172 556"/>
+<path class="l3" d="M208 540L196 556"/>
+<path class="l3" d="M232 540L220 556"/>
+<path class="l3" d="M256 540L244 556"/>
+<path class="l3" d="M280 540L268 556"/>
+<path class="l3" d="M304 540L292 556"/>
+<path class="l3" d="M328 540L316 556"/>
+<path class="l3" d="M352 540L340 556"/>
+<path class="l3" d="M376 540L364 556"/>
+<path class="l3" d="M400 540L388 556"/>
+<path class="l3" d="M424 540L412 556"/>
+<path class="l3" d="M448 540L436 556"/>
+<path class="l3" d="M472 540L460 556"/>
+<path class="l3" d="M496 540L484 556"/>
+<path class="l3" d="M520 540L508 556"/>
+<path class="l3" d="M544 540L532 556"/>
+<path class="l3" d="M568 540L556 556"/>
+<path class="l3" d="M592 540L580 556"/>
+<path class="l3" d="M616 540L604 556"/>
+<path class="l3" d="M640 540L628 556"/>
+<path class="l3" d="M664 540L652 556"/>
+<path class="l3" d="M688 540L676 556"/>
+<path class="l3" d="M712 540L700 556"/>
+<path class="l3" d="M736 540L724 556"/>
+<path class="l3" d="M760 540L748 556"/>
+<path class="ao" d="M70 380L70 440"/>
+<path class="ao" d="M62 430L70 442L78 430"/>
+</svg>
