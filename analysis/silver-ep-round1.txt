@@ -1,0 +1,41 @@
+CZ Silver EP: calibration against the official Nord Silver EP demos (round 1, 2026-11-13)
+
+Reference: the two official demos from nordkeyboards.com (Soft and Gospel), concatenated, 83 s (kept private).
+Reference measures: side/mid width 0.18 (near mono), tilt -6.0 dB/oct, centroid 387 Hz, dynamic range 5.8 dB.
+Test performance: register_match.py v2 on the reference (140 attacks, ~2.7 notes/s, keys 29-106, median 61),
+seeds 1 and 7, rendered offline through the Keyscape AU.
+
+Candidates (factory Keyscape electric pianos, seed 1, MINE - REF per octave band, dB)
+                      63   125   250   500  1000  2000  4000  8000   width  tilt   cen
+Duo Ultra 80s MIDI  +5.1  +1.3  -3.4  -6.4  +3.3  +1.1  +0.5  +3.4   0.46  -4.5   370
+JD-800 Crystal      +5.8  -0.4  -3.3  -4.3  -1.8  +0.6  +4.7 +13.7   0.37  -3.9   270
+MK-80 Rhodes        +6.3  -0.4  -4.1  -2.7  +0.9  +3.8  +6.1 +16.5   0.44  -3.3   379
+MKS-20 EP1 Gospel   +6.2  +0.1  -2.3  -3.6  -1.9  -1.2  -3.8 -10.4   0.36  -6.1   240
+MKS-20 EP1 Pop      +6.8  -0.1  -2.8  -6.4  -5.0  -3.6  -2.4  -1.5   0.53  -5.7   170
+MKS-20 EP2 Gospel   +7.0  -0.7  -4.0  -2.9  -2.3  -0.5  +0.5  +0.5   0.37  -4.9   238   <- chosen (flattest)
+MKS-20 EP2 Pop      +7.0  -1.3  -4.1  -4.1  -2.6  -0.0  +3.8  +8.6   0.37  -4.0   230
+Rhodes Classic      +7.0  +2.4  -4.3  -4.1  -2.4  -2.6  -8.0 -19.9   0.42  -6.6   215
+LA Custom Brite 80s +6.9  +2.8  -3.3 -14.3  -1.9  +0.5  +2.6 -12.4   0.33  -3.4   221
+
+Changes on MKS-20 - E.Piano 2 Gospel
+  Vintage 2-Band EQ  VOICE[0]/EFFRACK[0]/EFFMODULE[3]  off -> on, Lo Cut P2 0.6
+  Studio EQ Bass     VOICE[0]/EFFRACK[0]/EFFMODULE[1]@P0   0.51 -> 0.40
+  Studio EQ Treble   VOICE[0]/EFFRACK[0]/EFFMODULE[1]@P4   0.59 -> 0.28
+  Chorus mix         EFFRACK[0]/EFFMODULE[0]@P0            0.50 -> 0.25   (width 0.37 -> 0.18)
+  Chorus depth       EFFRACK[0]/EFFMODULE[0]@P2            0.795 -> 0.40
+  Output gain        SYNTHENG@gain                          0.853 -> 1.0   (gives back the ~7 dB the cuts removed)
+
+Result (MINE - REF)
+               31    63   125   250   500  1000  2000  4000  8000 16000   width  tilt  cen
+factory s1   +30.7  +7.0  -0.7  -4.0  -2.9  -2.3  -0.5  +0.5  +0.5  +7.5   0.37  -4.9  238
+cal s1       +24.1  +1.4  +1.5  -1.5  -0.1  -1.5  +0.7  +1.8  -0.1  +2.4   0.18  -5.3  354
+factory s7   +32.4  +8.2  -3.7  -7.0  -3.7  -3.0  -1.2  -1.9  -2.0  +6.6   0.33  -4.8  197
+cal s7       +27.2  +4.0  -0.1  -2.9  +0.4  -0.7  +1.5  +0.5  -1.6  +2.4   0.20  -5.3  369
+
+Open
+  31 Hz band: the demos hold almost nothing below 44 Hz (-37 dB); every candidate measured +24 to +32 there. Part is
+  the test performance (F1/G1 detections that may be false), part is real sub content the Lo Cut and bass shelf
+  do not reach. Not audible on most systems; check on headphones or a sub.
+  Dynamics: not calibrated. Synthetic timing makes the dynamic range (9 to 13 dB) incomparable with the demos' 5.8 dB.
+  The Tape Slammer P2 had no measurable effect. Check by playing.
+  Untested knobs: Vintage 2-Band EQ P1 and P6 changed nothing measurable.

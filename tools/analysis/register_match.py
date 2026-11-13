@@ -30,17 +30,33 @@ fk = 440 * 2 ** ((keys - 69) / 12)
 lvl = np.array([P[(f >= q / 1.015) & (f <= q * 1.015)].max(0) if ((f >= q / 1.015) & (f <= q * 1.015)).any() else np.zeros(P.shape[1]) for q in fk])
 db = 10 * np.log10(lvl + 1e-12)
 # a key is active when it is a local peak among its neighbours (so harmonics of lower notes count less)
-peak = (db > np.roll(db, 1, 0) + 3) & (db > np.roll(db, -1, 0) + 3) & (db > db.max() - 45)
+peak = (db > np.roll(db, 1, 0) + 3) & (db > np.roll(db, -1, 0) + 3) & (db > db.max() - 45) & (db > db.max(0) - 25)
+# a note stands well above that key's own floor (hum, rumble and room tone sit at the floor all the time)
+peak &= db > np.median(db, 1, keepdims=True) + 10
+# a peak that sits on a harmonic of a louder active key below it (octave, twelfth, two octaves, 17th) is a partial, not a note
+for sh in (12, 19, 24, 28):
+    below = np.zeros_like(peak); below[sh:] = peak[:-sh] & (db[:-sh] > db[sh:] - 6)
+    peak &= ~below
+# low keys: a single FFT bin there catches every attack thump, so a bass note also needs its octave partial,
+# and nothing below E1 (the bottom of a 73-key electric piano, and rare in demos) counts
+low = fk < 110
+octave_ok = np.zeros_like(peak); octave_ok[:-12] = db[12:] > db.max(0) - 30
+peak[low] &= octave_ok[low]
+peak[fk < 41] = False
 # onset: becomes active, or jumps 6 dB within ~0.1 s
 jump = np.zeros_like(peak); jump[:, 3:] = (db[:, 3:] - db[:, :-3]) > 6
 on = peak & np.concatenate([np.ones((88, 1), bool), ~peak[:, :-1] | jump[:, 1:]], 1)
-hist = on.sum(1).astype(float) + .05
-dur = len(m) / sr
 # note density from broadband spectral flux (per-key onsets overcount: harmonics and beating retrigger them)
 L = np.log10(P[(f > 60) & (f < 6000)] + 1e-12)
 flux = np.maximum(np.diff(L, axis=1), 0).sum(0)
 thr = np.median(flux) + 1.5 * flux.std()
 pk = [i for i in range(2, len(flux) - 2) if flux[i] > thr and flux[i] == flux[i - 2:i + 3].max()]
+# key onsets only count at a real attack (hum and steady partials flicker without one)
+near = np.zeros(P.shape[1], bool)
+for i in pk: near[max(0, i - 1):i + 3] = True
+on &= near
+hist = on.sum(1).astype(float) + .05
+dur = len(m) / sr
 rate = len(pk) / dur  # onsets per second (chords count once, so add a little for simultaneous notes)
 rate *= 1.6
 print(f'reference: {dur:.1f} s, {len(pk)} attacks, ~{rate:.1f} notes/s, key range {keys[hist > 1].min()}-{keys[hist > 1].max()}, '
