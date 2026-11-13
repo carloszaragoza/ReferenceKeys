@@ -214,7 +214,7 @@
   });
 
   /* ---------- compare chart ---------- */
-  const NAMES = { german: 'Roland German Concert', royal: 'Nord Royal Grand 3D', cfx: 'Yamaha CFX' };
+  const NAMES = { german: 'Roland German Concert', royal: 'Nord Royal Grand 3D', cfx: 'Yamaha CFX', white: 'Nord White Grand', silver: 'Nord Silver EP' };
   const LABELS = ['32', '63', '125', '250', '500', '1k', '2k', '4k', '8k', '16k'];
   const VB = { w: 760, h: 360, l: 44, r: 12, t: 14, b: 34 }, Y0 = 0, Y1 = -70;
   const xs = i => VB.l + i * (VB.w - VB.l - VB.r) / 9;

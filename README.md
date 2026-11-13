@@ -1,7 +1,7 @@
 # ReferenceKeys
 
-Three piano presets for **Spectrasonics Keyscape**, each calibrated against a reference recording
-(Roland German Concert, Yamaha CFX, Nord Royal Grand 3D) by measuring spectral balance, stereo image, dynamics and room,
+Five presets for **Spectrasonics Keyscape**, four grands and an electric piano, each calibrated against a reference
+recording (Roland German Concert, Yamaha CFX, Nord Royal Grand 3D, Nord White Grand, Nord Silver EP) by measuring spectral balance, stereo image, dynamics and room,
 plus velocity curves measured on a Yamaha MX88.
 
 > Requires a licensed copy of Keyscape. This repo contains settings only (patches and curves), no samples.
@@ -16,8 +16,10 @@ plus velocity curves measured on a Yamaha MX88.
 | CZ German Concert V2 | Keyscape (LA Custom C7) | Roland RD-2000 German Concert |
 | CZ CFX Concert | Keyscape (LA Custom C7) | Official Yamaha CFX demo |
 | CZ Royal 3D Grand | Keyscape | Nord Grand · Royal Grand 3D |
+| CZ White Grand | Keyscape (LA Custom C7) | Official Nord White Grand demo |
+| CZ Silver EP | Keyscape (MKS-20 E.Piano 2) | Official Nord Silver EP demos |
 
-Twelve more patches (Keyscape grands, Omnisphere keys and multis) live in `in-progress/`. They are not calibrated
+Eleven more patches (Keyscape grands, Omnisphere keys and multis) live in `in-progress/`. They are not calibrated
 against a reference yet and are not part of the release.
 
 ## Velocity curves

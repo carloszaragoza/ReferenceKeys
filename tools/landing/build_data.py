@@ -29,6 +29,11 @@ SETS={
               before=(P+'my-recordings/Royal 3D 1.wav',[(39,999)]),after=(P+'my-recordings/Royal 3D 3.wav',[(29,999)])),
  'cfx':dict(ref=(P+'reference-audio/Yamaha CFX demo.wav',[(65,72),(118,999)]),
             before=(P+'my-recordings/CFX compare 1.wav',[]),after=(P+'my-recordings/CFX compare 2.wav',[])),
+ # register-matched test performances (tools/analysis/register_match.py), rendered through both patches
+ 'white':dict(ref=(P+'reference-audio/Nord White Grand official.wav',[]),
+              before=(P+'renders/landing/white match v1.wav',[(57,999)]),after=(P+'renders/landing/white match calibrated.wav',[(57,999)])),
+ 'silver':dict(ref=(P+'reference-audio/Nord Silver EP demos.wav',[]),
+               before=(P+'renders/landing/silver match factory.wav',[(83,999)]),after=(P+'renders/landing/silver match calibrated.wav',[(83,999)])),
 }
 D={'bands':CENT,'sets':{}}
 for k,s in SETS.items():
@@ -38,7 +43,7 @@ def mp3(path):
     raw=subprocess.run(['ffmpeg','-v','error','-i',path,'-ac','1','-ar','8000','-f','s16le','-'],capture_output=True).stdout
     return np.frombuffer(raw,np.int16).astype(float)
 D['wave']={}
-for n in ['german-v1','german-v2','royal-v1','royal-v3','cfx-v1','cfx-v2']:
+for n in ['german-v1','german-v2','royal-v1','royal-v3','cfx-v1','cfx-v2','white-v1','white-v2','silver-v1','silver-v2']:
     y=mp3(f'landing/assets/audio/{n}.mp3'); N=180; seg=np.array_split(np.abs(y),N)
     pk=np.array([np.percentile(s,99) for s in seg]); pk=pk/pk.max()
     D['wave'][n]=[round(float(v),3) for v in np.sqrt(pk)]

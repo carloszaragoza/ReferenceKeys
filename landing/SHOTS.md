@@ -65,7 +65,7 @@ Merges the current story, compare and takes sections.
 
 ### 7 · Download (1 screen)
 - **Image:** the camera pulls back to the whole piano while the spotlight narrows on it.
-- **Text:** the three names roll in like credits, a large **Download the 3 presets** button and install in three lines.
+- **Text:** the five names roll in like credits, a large **Download the 5 presets** button and install in three lines.
 - **Sound:** a final chord that dies away.
 
 ### 8 · Credits (footer)
@@ -82,6 +82,6 @@ Merges the current story, compare and takes sections.
 - **Phone:** the same shots with vertical framing.
 
 ## Download **(live)**
-The button downloads `ReferenceKeys.zip` from the latest GitHub Release: the three presets, the MX88 velocity
+The button downloads `ReferenceKeys.zip` from the latest GitHub Release: the five presets, the MX88 velocity
 curves and `INSTALL.txt`. Built by `tools/release/make_pack.sh`. The other twelve patches live in `in-progress/`
 until they are polished, and are not on the page or in the ZIP.
