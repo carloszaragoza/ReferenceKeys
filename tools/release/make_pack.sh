@@ -29,7 +29,7 @@ Then click Refresh Library in the Keyscape browser.
   MX88 Normal, MX88
 
 Not affiliated with Spectrasonics, Yamaha, Nord or Roland.
-https://carloszaragoza.github.io/ReferenceKeys/
+https://keys.chartdown.app/
 EOF
 (cd dist && zip -qrX ReferenceKeys.zip ReferenceKeys -x '*.DS_Store')
 cat > dist/NOTES.md <<'EOF'

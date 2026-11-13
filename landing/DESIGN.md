@@ -1,7 +1,7 @@
 # ReferenceKeys design system
 
 The page is a listening room: a dark stage where sound gets measured, and quiet paper pages where the numbers get explained.
-Every token lives in `:root` in `styles.css`. The live sheet is `design.html` (published at `/ReferenceKeys/design.html`).
+Every token lives in `:root` in `styles.css`. The live sheet is `design.html` (published at `https://keys.chartdown.app/design.html`).
 
 ## Principles
 

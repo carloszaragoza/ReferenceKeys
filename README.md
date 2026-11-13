@@ -7,7 +7,7 @@ plus velocity curves measured on a Yamaha MX88.
 > Requires a licensed copy of Keyscape. This repo contains settings only (patches and curves), no samples.
 
 **Download:** [ReferenceKeys.zip](https://github.com/carloszaragoza/ReferenceKeys/releases/latest/download/ReferenceKeys.zip) (latest release) ·
-[landing page](https://carloszaragoza.github.io/ReferenceKeys/)
+[landing page](https://keys.chartdown.app/)
 
 ## Presets
 
