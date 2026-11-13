@@ -22,6 +22,7 @@
     document.title = 'ReferenceKeys';
     renderSet(currentSet, false);
     syncPlayLabels();
+    setStep(step); drawLive();
   }
   $('#lang').addEventListener('click', () => { lang = lang === 'es' ? 'en' : 'es'; store.set('rk-lang', lang); applyLang(); });
 
@@ -36,6 +37,7 @@
   let current = null; // name of the track loaded in <audio>
   let owner = null; // 'hero' | 'ab' | take element
   async function load(name, at = 0, who, autoplay = true) {
+    if (autoplay) ensureGraph();
     if (owner !== who && !audio.paused) audio.pause();
     owner = who;
     const go = () => { try { audio.currentTime = at; } catch {} if (autoplay) audio.play().catch(() => {}); tick(); };
@@ -46,6 +48,7 @@
     audio.addEventListener('loadedmetadata', go, { once: true }); audio.load();
   }
   function toggle(name, who) {
+    ensureGraph();
     if (owner === who && !audio.paused) { audio.pause(); return; }
     if (owner === who && audio.paused && current === name) { audio.play().catch(() => {}); return; }
     load(name, 0, who);
@@ -69,7 +72,7 @@
   function tick() {
     const p = audio.duration ? audio.currentTime / audio.duration : 0;
     if (owner === 'hero') { const s = $('#spec'); $('#specHead').style.transform = `translateX(${p * s.clientWidth}px)`; }
-    if (owner === 'ab') { drawWave($('#abWave'), abName, p); $('#abTime').textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; }
+    if (owner === 'ab') { drawWave($('#abWave'), abName, p); $('#abTime').textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; if (!audio.paused) measure(); drawLive(); }
     if (owner instanceof Element) { const c = $('canvas', owner); drawWave(c, owner.dataset.src, p); }
     if (!audio.paused) raf = requestAnimationFrame(tick);
   }
@@ -200,6 +203,88 @@
     const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); n.click();
   });
 
+
+  /* ---------- live analyzer: Web Audio octave bands, averaged per version, drawn over the reference ---------- */
+  let actx = null, analyser = null, fbuf = null, bandBins = null, totBins = null;
+  const acc = {}; // track name -> { sum: band power sums, tot: total power sum, n: frames }
+  function ensureGraph() {
+    if (actx) { if (actx.state === 'suspended') actx.resume(); return; }
+    try {
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      const node = actx.createMediaElementSource(audio);
+      analyser = actx.createAnalyser(); analyser.fftSize = 8192; analyser.smoothingTimeConstant = 0;
+      node.connect(analyser); analyser.connect(actx.destination);
+      fbuf = new Float32Array(analyser.frequencyBinCount);
+      const hz = actx.sampleRate / analyser.fftSize;
+      bandBins = D.bands.map(c => [Math.max(1, Math.ceil(c / Math.SQRT2 / hz)), Math.floor(c * Math.SQRT2 / hz)]);
+      totBins = [Math.ceil(30 / hz), Math.floor(16000 / hz)];
+    } catch { actx = null; }
+  }
+  function measure() {
+    if (!analyser) return;
+    analyser.getFloatFrequencyData(fbuf);
+    const pw = i => Math.pow(10, fbuf[i] / 10);
+    let tot = 0; for (let i = totBins[0]; i <= totBins[1]; i++) tot += pw(i);
+    if (!(tot > 1e-9)) return; // skip silence
+    const a = acc[abName] || (acc[abName] = { sum: new Float64Array(10), tot: 0, n: 0 });
+    bandBins.forEach(([lo, hi], b) => { let s2 = 0; for (let i = lo; i <= hi; i++) s2 += pw(i); a.sum[b] += s2; });
+    a.tot += tot; a.n++;
+  }
+  const levels = a => Array.from(a.sum, v => 10 * Math.log10(v / a.tot + 1e-12));
+  const gap = (lv, ref) => { let s2 = 0; for (let i = 1; i <= 8; i++) s2 += Math.abs(lv[i] - ref[i]); return s2 / 8; };
+  function drawLive() {
+    const c = $('#liveCanvas'); if (!c) return;
+    const [x, w, h] = fit(c), padL = 34, padB = 22, ref = D.sets.german.ref.bands;
+    const X = i => padL + i * (w - padL - 8) / 9, Y = v => 6 + (-Math.max(-70, Math.min(0, v))) / 70 * (h - padB - 6);
+    x.clearRect(0, 0, w, h);
+    x.strokeStyle = css('--line'); x.lineWidth = 1; x.fillStyle = css('--faint'); x.font = `10px ${css('--mono')}`;
+    for (let v = 0; v >= -70; v -= 14) { x.beginPath(); x.moveTo(padL, Y(v)); x.lineTo(w - 8, Y(v)); x.stroke(); x.textAlign = 'right'; x.fillText(v, padL - 6, Y(v) + 3); }
+    x.textAlign = 'center'; LABELS.forEach((l, i) => x.fillText(l, X(i), h - 6));
+    const line = (arr, col, width, dash) => { x.setLineDash(dash || []); x.strokeStyle = col; x.lineWidth = width; x.beginPath(); x.moveTo(X(0), Y(arr[0])); for (let i = 1; i < arr.length; i++) { const mx = (X(i - 1) + X(i)) / 2; x.bezierCurveTo(mx, Y(arr[i - 1]), mx, Y(arr[i]), X(i), Y(arr[i])); } x.stroke(); x.setLineDash([]); };
+    line(ref, css('--ink'), 2);
+    const other = abName === 'german-v2' ? 'german-v1' : 'german-v2';
+    if (acc[other] && acc[other].n > 20) line(levels(acc[other]), css('--faint'), 1.6, [4, 5]);
+    const cur = acc[abName], sc = $('#liveScore');
+    if (cur && cur.n > 20) {
+      const lv = levels(cur); line(lv, css('--accent'), 3);
+      x.fillStyle = css('--accent'); lv.forEach((v, i) => { x.beginPath(); x.arc(X(i), Y(v), 3, 0, 7); x.fill(); });
+      const parts = [`<strong>${gap(lv, ref).toFixed(1)} dB</strong> ${t('live.gap')} (${abName === 'german-v2' ? 'V2' : 'V1'})`];
+      if (acc[other] && acc[other].n > 20) parts.push(`${abName === 'german-v2' ? 'V1' : 'V2'}: ${gap(levels(acc[other]), ref).toFixed(1)} dB`);
+      sc.innerHTML = parts.join('&nbsp;&nbsp;&nbsp;');
+    } else sc.textContent = t('live.idle');
+  }
+
+  /* ---------- story: the German Concert case, steps drive a sticky visual ---------- */
+  const sv = $('#storyChart');
+  const sg = el('g', {}, sv);
+  for (let v = 0; v >= -70; v -= 10) el('line', { x1: VB.l, x2: VB.w - VB.r, y1: ys(v), y2: ys(v), stroke: 'var(--line)' }, sg);
+  const sax = el('g', {}, sv);
+  LABELS.forEach((l, i) => { el('text', { x: xs(i), y: VB.h - 10, 'text-anchor': 'middle', fill: 'var(--faint)', 'font-size': 11, 'font-family': 'Geist Mono, monospace' }, sax).textContent = l; });
+  const G = D.sets.german;
+  el('path', { class: 'ln', d: path(G.ref.bands), stroke: 'var(--ink)', 'stroke-width': 2.2 }, sv);
+  const sBefore = el('path', { class: 'ln', d: path(G.before.bands), stroke: 'var(--faint)', 'stroke-width': 2, 'stroke-dasharray': '4 5' }, sv);
+  const sAfter = el('path', { class: 'ln', d: path(G.after.bands), stroke: 'var(--accent)', 'stroke-width': 3 }, sv);
+  const UNBALANCED_DB = 7.25; // measured on the first V2 render (Imager P0 at 0.3)
+  const STEPS = {
+    1: { before: 1, after: 0, bal: G.before.balance, read: () => `${t('sr.center')} <b>${G.before.centroid} Hz</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.centroid} Hz` },
+    2: { before: .35, after: 1, bal: G.before.balance, read: () => `${t('sr.center')} <b>${G.after.centroid} Hz</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.centroid} Hz` },
+    3: { before: 0, after: 1, bal: UNBALANCED_DB, read: () => `${t('sr.left')} <b>+${UNBALANCED_DB} dB</b>` },
+    4: { before: 0, after: 1, bal: G.after.balance, read: () => `${t('sr.balance')} <b>${G.after.balance.toFixed(2)} dB</b>&nbsp;&nbsp;${t('sr.width')} ${G.after.width} (${t('sr.roland')} ${G.ref.width})` }
+  };
+  let step = 1;
+  function setStep(n) {
+    step = n; const st = STEPS[n];
+    sBefore.style.opacity = st.before; sAfter.style.opacity = st.after;
+    const half = $('.meter__track').clientWidth / 2;
+    $('#needle').style.transform = `translateX(${-Math.max(-1, Math.min(1, st.bal / 10)) * half}px)`; // positive dB = left louder
+    $('#storyRead').innerHTML = st.read();
+    $$('.step').forEach(s2 => s2.classList.toggle('is-active', +s2.dataset.step === n));
+  }
+  if ('IntersectionObserver' in window) {
+    const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setStep(+e.target.dataset.step); }), { rootMargin: '-45% 0px -45% 0px' });
+    $$('.step').forEach(s2 => so.observe(s2));
+  }
+
   /* ---------- MX88 velocity curve (measured) ---------- */
   function drawVel() {
     const c = $('#velChart'), [x, w, h] = fit(c), m = D.mx88, pad = 28;
@@ -238,7 +323,7 @@
     drawSpec($('#specCanvas')); drawSpec($('#miniSpec'), .45);
     drawWave($('#abWave'), abName, owner === 'ab' && audio.duration ? audio.currentTime / audio.duration : 0);
     $$('.take').forEach(t2 => drawWave($('canvas', t2), t2.dataset.src, 0));
-    drawVel();
+    drawVel(); drawLive(); setStep(step);
   }
   applyLang();
   const ro = new ResizeObserver(() => paint()); ro.observe(document.body);

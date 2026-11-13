@@ -64,6 +64,35 @@
     <div class="proof__item reveal"><b class="num">19<small> to </small>111</b><span data-i18n="proof.4">Velocities measured on a Yamaha MX88</span></div>
   </section>
 
+
+  <!-- STORY: the German Concert case, scroll-driven (IntersectionObserver steps, sticky visual) -->
+  <section class="story" id="story">
+    <div class="wrap">
+      <h2 class="h2 reveal" data-i18n="story.title">The German Concert case</h2>
+      <p class="lead reveal" data-i18n="story.lead">One preset, nine renders, one mistake caught by the numbers.</p>
+      <picture class="story__photo reveal">
+        <img src="assets/img/strings-1600.jpg" srcset="assets/img/strings-800.jpg 800w, assets/img/strings-1600.jpg 1600w" sizes="(max-width: 1240px) 100vw, 1240px" width="1600" height="926" loading="lazy" alt="Strings, tuning pins and red felt inside a grand piano">
+      </picture>
+      <div class="story__grid">
+        <div class="story__visual" id="storyVis" data-step="1" aria-hidden="true">
+          <svg id="storyChart" viewBox="0 0 760 360"></svg>
+          <div class="meter">
+            <span class="meter__lbl">L</span>
+            <div class="meter__track"><i class="meter__mid"></i><b class="meter__needle" id="needle"></b></div>
+            <span class="meter__lbl">R</span>
+          </div>
+          <div class="story__read num" id="storyRead"></div>
+        </div>
+        <ol class="story__steps">
+          <li class="step" data-step="1"><h3 class="h3" data-i18n="st1.t">Version 1 sounded dark</h3><p data-i18n="st1.p">Built by ear from a description. Measured against the Roland, it had 12 dB too much deep bass and its brightness center sat at 220 Hz instead of 477.</p></li>
+          <li class="step" data-step="2"><h3 class="h3" data-i18n="st2.t">Nine renders later</h3><p data-i18n="st2.p">Same MIDI, rendered through every variant. Lo Boost off, the high shelf moved from 18 kHz to 8 kHz. The curve landed on the reference.</p></li>
+          <li class="step" data-step="3"><h3 class="h3" data-i18n="st3.t">Then it leaned left</h3><p data-i18n="st3.p">The stereo control I used was actually a balance knob. The width number looked perfect, but the piano sat 7 dB to the left. I heard it on the first play.</p></li>
+          <li class="step" data-step="4"><h3 class="h3" data-i18n="st4.t">Fixed, then shipped</h3><p data-i18n="st4.p">The real width control, measured again: centered within 0.06 dB and the same width as the Roland.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
   <!-- COMPARE: interactive octave-band chart -->
   <section class="compare wrap" id="compare">
     <p class="eyebrow" data-i18n="compare.eyebrow">Measured, not guessed</p>
@@ -107,8 +136,18 @@
             <span class="ab__time num" id="abTime">0:00 / 1:04</span>
           </div>
         </div>
+        <div class="live">
+          <div class="live__head">
+            <b data-i18n="live.t">Live analyzer</b>
+            <span class="live__score num" id="liveScore" data-i18n="live.idle">Press play to measure</span>
+          </div>
+          <canvas id="liveCanvas" aria-label="Live octave analysis compared with the Roland reference" role="img"></canvas>
+          <div class="legend"><span class="lg lg--ref"><i></i><b>Roland German Concert</b></span><span class="lg lg--after"><i></i><b data-i18n="live.now">Now playing</b></span><span class="lg lg--before"><i></i><b data-i18n="live.other">Other version</b></span></div>
+        </div>
       </div>
       <div class="takes">
+        <picture class="takes__photo reveal"><img src="assets/img/keys-800.jpg" srcset="assets/img/keys-800.jpg 800w, assets/img/keys-1600.jpg 1600w" sizes="(max-width: 760px) 100vw, 40vw" width="800" height="600" loading="lazy" alt="A hand pressing piano keys, close up"></picture>
+        <div class="takes__body">
         <h3 class="h3 reveal" data-i18n="takes.title">Live takes on my MX88</h3>
         <p class="lead lead--sm reveal" data-i18n="takes.lead">Different performances, so listen for the tone, not the notes.</p>
         <div class="takes__grid">
@@ -116,6 +155,7 @@
           <article class="take reveal" data-src="royal-v3"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>Royal 3D Grand</b><span data-i18n="take.after">Calibrated</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
           <article class="take reveal" data-src="cfx-v1"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>CFX Concert</b><span data-i18n="take.before">Before</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
           <article class="take reveal" data-src="cfx-v2"><button class="take__play" type="button" aria-label="Play"><span class="icon i-play" aria-hidden="true"></span></button><div><b>CFX Concert</b><span data-i18n="take.mid">Second pass</span></div><canvas class="wave wave--sm" aria-hidden="true"></canvas></article>
+        </div>
         </div>
       </div>
     </div>
@@ -130,7 +170,8 @@
         <p data-i18n="m1.p">Four rounds of pp to ff on the MX88 set the velocity curve, so soft really means soft.</p>
         <canvas id="velChart" aria-label="MX88 Wide velocity curve" role="img"></canvas>
       </article>
-      <article class="cell cell--accent reveal">
+      <article class="cell cell--photo reveal">
+        <img src="assets/img/hammers-800.jpg" srcset="assets/img/hammers-800.jpg 800w, assets/img/hammers-1600.jpg 1600w" sizes="(max-width: 900px) 100vw, 33vw" width="800" height="533" loading="lazy" alt="Felt hammers and strings inside a piano">
         <h3 class="h3" data-i18n="m2.t">Render the same take</h3>
         <p data-i18n="m2.p">MIDI goes through the Keyscape plugin offline. Every render is bit-identical, so any change you hear is the patch.</p>
       </article>
@@ -203,6 +244,7 @@
   <div class="wrap foot__in">
     <p data-i18n="foot.req">Requires licensed copies of Spectrasonics Keyscape and/or Omnisphere. These are settings only, no samples.</p>
     <p class="foot__small" data-i18n="foot.tm">Not affiliated with Spectrasonics, Yamaha, Nord or Roland. Product names belong to their owners and are used only to describe the reference recordings.</p>
+    <p class="foot__small" data-i18n="foot.photos">Photos: Kimberleigh Aleksandre (hammers), Hans Braxmeier (keys) and Kjethdubns (strings), public domain (CC0) via Wikimedia Commons.</p>
     <div class="foot__row">
       <span>Carlos Zaragoza</span>
       <a class="foot__gh js-repo" href="#"><span class="icon i-github" aria-hidden="true"></span>GitHub</a>
