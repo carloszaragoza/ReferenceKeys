@@ -116,6 +116,47 @@ solid(new THREE.BoxGeometry(.6, 1.7, .12).translate(0, -1.05, (840 - 520) / 100)
 [-.16, 0, .16].forEach(dx => solid(new THREE.BoxGeometry(.07, .03, .36).translate(dx, FLOOR + .18, (870 - 520) / 100)));
 { const pts = []; for (let i = 0; i <= 96; i++) { const a = i / 96 * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(a) * 5, FLOOR, Math.sin(a) * 5 + .2)); }
   piano.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), inkSoft)); }
+
+/* ---------- grounding: a pool of light on the floor and the piano's soft shadow inside it ----------
+   Without a shadow the piano floats. The light comes from straight above and slightly in front, so the
+   shadow stays fixed under the case while the camera walks around it. Both are baked once into canvas
+   textures (no real-time shadow maps): an ambient blur of the case outline plus tight contact spots
+   under the casters, pedals and lyre. Blur uses canvas shadowBlur, which every browser supports. */
+const FS = 12, FPX = 512, fpx = v => (v + FS / 2) / FS * FPX;                 // floor units -> canvas px
+const planX = x => fpx((x - 375) / 100), planZ = y => fpx((y - 520) / 100 - .12); // nudged back: light is in front
+function floorTex(draw) {
+  const c = document.createElement('canvas'); c.width = c.height = FPX;
+  draw(c.getContext('2d'));
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
+}
+const blurred = (ctx, blur, alpha, path) => { // draw a shape off canvas and keep only its blurred shadow
+  ctx.save(); ctx.shadowColor = `rgba(255,255,255,${alpha})`; ctx.shadowBlur = blur; ctx.shadowOffsetX = 4 * FPX;
+  ctx.translate(-4 * FPX, 0); ctx.fillStyle = '#fff'; ctx.beginPath(); path(); ctx.fill(); ctx.restore();
+};
+const caseOutline = (ctx, grow = 1) => {
+  const mx = planX(375), mz = planZ(520);
+  OUTER.forEach(([x, y], i) => { const px = mx + (planX(x) - mx) * grow, pz = mz + (planZ(y) - mz) * grow; i ? ctx.lineTo(px, pz) : ctx.moveTo(px, pz); });
+  ctx.closePath();
+};
+const shadowTex = floorTex(ctx => {
+  blurred(ctx, 46, .45, () => caseOutline(ctx, 1.08));                       // wide, soft ambient shadow
+  blurred(ctx, 16, .55, () => caseOutline(ctx, .96));                        // core under the case
+  const spot = (x, y, r) => () => ctx.ellipse(planX(x), planZ(y), r, r * .8, 0, 0, Math.PI * 2);
+  [[100, 850], [650, 850], [235, 160]].forEach(([x, y]) => blurred(ctx, 7, .95, spot(x, y, 7)));   // casters
+  blurred(ctx, 8, .8, () => ctx.rect(planX(345), planZ(866), planX(405) - planX(345), 10));          // lyre and pedals
+});
+const poolTex = floorTex(ctx => {
+  const g = ctx.createRadialGradient(FPX / 2, FPX / 2, 0, FPX / 2, FPX / 2, FPX / 2);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.45, 'rgba(255,255,255,.55)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, FPX, FPX);
+});
+const floorMat = (map, opacity) => new THREE.MeshBasicMaterial({ map, transparent: true, opacity, depthWrite: false });
+const poolMat = floorMat(poolTex, .13), shadowMat = floorMat(shadowTex, .9);
+[[poolMat, .002], [shadowMat, .004]].forEach(([m, lift], i) => {
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(FS, FS).rotateX(-Math.PI / 2), m);
+  p.position.y = FLOOR + lift; p.renderOrder = -2 + i; piano.add(p);
+});
+
 piano.position.set(0, .55, -.2); // center of mass of piano + legs near the origin
 
 /* ---------- theme: ink and fill follow the surface behind the piano ---------- */
@@ -124,6 +165,9 @@ function applyTheme() {
   const lineC = onStage ? '#f4f2ee' : css('--ink'), fillC = onStage ? css('--stage') || '#0e0e10' : css('--bg');
   const key = lineC + fillC; if (key === themeKey) return; themeKey = key;
   [ink, inkSoft].forEach(m => m.color.set(lineC)); fill.color.set(fillC);
+  /* on stage the light pool brightens the dark floor and the shadow is black; on the page there is no pool and the shadow is ink */
+  poolMat.color.set(lineC); poolMat.opacity = onStage ? .13 : 0;
+  shadowMat.color.set(onStage ? '#000000' : css('--ink')); shadowMat.opacity = onStage ? .9 : .22;
   keys.forEach(g => g.userData.mat.color.set(fillC));
   for (let k = 0; k < 88; k++) strCol.set(new THREE.Color(lineC).toArray().concat(new THREE.Color(lineC).toArray()), k * 6);
   strGeo.attributes.color.needsUpdate = true;
