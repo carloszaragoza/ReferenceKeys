@@ -238,10 +238,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .step p{color:var(--faint);margin:0;max-width:42ch;transition:color var(--dur-2) var(--ease)}
 .step.is-active p{color:var(--muted)}
 .step .h3{font-size:var(--t-h3-lg);letter-spacing:-.02em;margin-bottom:12px}
-.meter{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;margin-top:18px;font:12px var(--mono);color:var(--faint)}
-.meter__track{position:relative;height:10px;border-radius:var(--pill);background:var(--bg);border:1px solid var(--line)}
-.meter__mid{position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:var(--faint)}
-.meter__needle{position:absolute;top:50%;left:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:var(--pill);background:var(--accent);transition:transform .9s cubic-bezier(.34,1.56,.64,1)}
 .story__read{margin-top:14px;font-size:13px;color:var(--muted);min-height:1.6em}
 .story__read b{color:var(--accent);font-weight:500}
 @media (max-width:900px){
@@ -270,7 +266,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 @media (max-width:900px){.cell--photo{grid-column:auto;min-height:280px}}
 @media (max-width:760px){.takes{grid-template-columns:1fr}.takes__photo img{aspect-ratio:16/10}}
 
-@media (prefers-reduced-motion:reduce){.meter__needle,.step,.story__visual .ln{transition:none}}
+@media (prefers-reduced-motion:reduce){.step,.story__visual .ln{transition:none}}
 
 /* ---------- display type: masked line reveal (shared by stage and gate) ---------- */
 .wm{display:block;overflow:hidden;padding:.12em 0 .02em;margin-top:-.12em} /* top room keeps accents (Í, É) inside the mask */
@@ -284,14 +280,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- stage (hero) ---------- */
 .stage{position:relative;isolation:isolate;overflow:hidden;background:var(--stage);color:var(--stage-ink);min-height:min(calc(100dvh - 64px),1000px);display:flex}
-.stage__art{position:absolute;z-index:-2;top:-6%;right:max(-140px,calc(50% - 760px));height:120%;width:auto;max-width:none;opacity:.55;transform:rotate(-8deg);transform-origin:60% 40%}
-@media (max-width:760px){.stage__art{right:-45%;opacity:.32}}
 .stage::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 0%,transparent 45%,rgba(14,14,16,.88) 76%,var(--stage) 100%)}
 .stage__in{display:flex;flex-direction:column;gap:clamp(18px,3vh,32px);padding-top:clamp(20px,4vh,40px);padding-bottom:clamp(20px,4vh,40px)}
 .stage__kicker{margin:0;font-size:var(--t-micro);letter-spacing:.16em;text-transform:uppercase;color:var(--stage-muted)}
 .wordmark{margin:0;font:800 var(--t-wordmark)/.8 var(--display);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;display:flex;flex-wrap:wrap}
 .wordmark .wm--hot{color:var(--accent)}
-.stage__row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:end;margin-top:auto}
+.stage__in{position:relative;z-index:1}
+.stage__row{display:grid;grid-template-columns:minmax(0,560px);gap:24px 48px;align-items:end}
 .stage__claim{margin:0 0 10px;font-size:var(--t-claim);line-height:1.12;letter-spacing:-.025em;font-weight:500;max-width:22ch}
 .stage__claim em{font-style:normal;color:var(--accent)}
 .stage__sub{margin:0;color:var(--stage-muted);max-width:52ch;font-size:var(--t-small)}
@@ -299,20 +294,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 .btn--lg{padding:1em 1.6em;font-size:16px}
 .btn--glass{color:var(--stage-ink);border-color:rgba(244,242,238,.28);background:rgba(244,242,238,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .btn--glass:hover{border-color:var(--stage-ink);background:rgba(244,242,238,.12)}
-.scope{margin:0;border-top:1px solid var(--stage-line);padding-top:14px}
-.scope canvas{width:100%;height:clamp(150px,24vh,250px)}
 .scope__bar{height:2px;background:rgba(244,242,238,.12);border-radius:2px;overflow:hidden}
 .scope__bar i{display:block;height:100%;width:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
-.scope__foot{display:flex;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;margin-top:10px;font-size:var(--t-micro);color:var(--stage-muted)}
 .scope__read strong{color:var(--accent);font-weight:500;font-size:1.35em}
-.scope__lg{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono)}
-.k{display:inline-block;width:16px;height:0;border-top:2px solid var(--stage-ink)}
-.k--me{border-color:var(--accent);border-top-width:3px;margin-left:10px}
 @media (max-width:760px){.stage{min-height:auto}.stage__row{grid-template-columns:1fr}.stage__ctas .btn{flex:1 1 auto;justify-content:center}}
 @supports (animation-timeline:scroll()){
   @media (prefers-reduced-motion:no-preference){
-    .stage__art{animation:drift linear both;animation-timeline:scroll(root);animation-range:0 100vh}
-    @keyframes drift{from{transform:rotate(-8deg) scale(1.04)}to{transform:rotate(-4deg) translateY(8%)}}
   }
 }
 
@@ -352,4 +339,25 @@ button{font:inherit;color:inherit;cursor:pointer}
     @keyframes aperture{from{clip-path:inset(0 22% round 14px)}to{clip-path:inset(0 0 round 14px)}}
     @keyframes dolly{from{transform:scale(1.4)}to{transform:scale(1)}}
   }
+}
+
+/* ---------- live piano on the stage: 3D tilt, follows the cursor, keys follow the audio ---------- */
+/* z-order on the stage: fade (-1) < piano (0) < copy (1); the keyboard stays clear of the fade */
+.piano3d{position:absolute;z-index:0;bottom:9%;right:max(-20px,calc(50% - 680px));width:min(46vw,660px);aspect-ratio:760/1000;transform-origin:50% 100%;
+  transform:perspective(1600px) rotateX(calc(40deg - var(--ty,0) * 10deg)) rotateZ(calc(-14deg + var(--tx,0) * 8deg));
+  transform-style:preserve-3d;transition:transform 1.2s var(--ease);pointer-events:none}
+.piano3d__in{width:100%;height:100%;filter:drop-shadow(0 40px 60px rgba(0,0,0,.6))}
+.piano3d canvas{width:100%;height:100%}
+.hud{display:grid;gap:10px;max-width:420px;margin-top:auto}
+.scope__read{margin:0;font-size:var(--t-micro);color:var(--stage-muted)}
+@media (prefers-reduced-motion:no-preference){
+  .piano3d__in{animation:lay 1.8s var(--ease) .25s both}
+  @keyframes lay{from{opacity:0;transform:rotateX(-46deg) translateY(12%) scale(.9)}to{opacity:1;transform:none}}
+  .gated .piano3d__in{animation-play-state:paused}
+}
+/* phones and tablets: the piano leaves the background and sits under the copy, in the flow */
+@media (max-width:900px){
+  .stage{flex-direction:column}
+  .piano3d{position:relative;order:2;bottom:auto;right:auto;width:min(92vw,520px);margin:-26% auto -22%;transform-origin:50% 50%;transform:perspective(1400px) rotateX(42deg) rotateZ(-10deg)}
+  .hud{margin-top:var(--s-2)}
 }

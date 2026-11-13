@@ -91,14 +91,14 @@ Generated, never traced from photos: `python3 tools/landing/draw_art.py` writes 
 
 | File | Palette | Where |
 |---|---|---|
-| `piano-top.svg` | stage | Hero and social card |
+| `piano-top.svg` | stage | Social card and this sheet. The hero draws the same geometry live on a canvas |
 | `strings.svg` | page | Story opener |
 | `hands.svg` | band | Live takes |
 | `action.svg` | stage | Method tile |
 
 ## Components
 
-Buttons (`.btn--accent`, `.btn--ghost`, `.btn--glass` on the stage, `.btn--lg` / `.btn--sm`), tabs, segmented control, chips, the "Hear" toggle, the L/R meter, charts (reference in ink, before in dashed faint, ours in accent with a soft gap fill). See `design.html` for every one of them rendered with the live tokens.
+Buttons (`.btn--accent`, `.btn--ghost`, `.btn--glass` on the stage, `.btn--lg` / `.btn--sm`), tabs, segmented control, chips, the "Hear" toggle, the live piano (3D tilt toward the cursor, keys driven by the analyser), charts (reference in ink, before in dashed faint, ours in accent with a soft gap fill). See `design.html` for every one of them rendered with the live tokens.
 
 ## Accessibility
 

@@ -22,7 +22,7 @@
     document.title = 'ReferenceKeys';
     renderSet(currentSet, false);
     syncPlayLabels();
-    setStep(step); drawLive(); drawScope();
+    setStep(step); drawLive(); hud();
   }
   $('#lang').addEventListener('click', () => { lang = lang === 'es' ? 'en' : 'es'; store.set('rk-lang', lang); applyLang(); });
 
@@ -75,7 +75,6 @@
     const p = !audio.paused;
     setIcon($('#heroPlay'), p && owner === 'hero');
     $$('.hear').forEach(b => setIcon(b, p && owner === b));
-    if (!(p && hearing())) setStep(step);
     setIcon($('#abPlay'), p && owner === 'ab');
     $$('.take').forEach(el => { const on = p && owner === el; setIcon($('.take__play', el), on); el.classList.toggle('is-playing', on); });
   }
@@ -85,11 +84,11 @@
   let raf = 0;
   function tick() {
     const p = audio.duration ? audio.currentTime / audio.duration : 0;
-    if (owner === 'hero') { $('#scopeHead').style.transform = `scaleX(${p})`; if (!audio.paused) measure('german-v2'); drawScope(); }
-    if (hearing() && !audio.paused) liveBalance();
+    if (owner === 'hero') { $('#scopeHead').style.transform = `scaleX(${p})`; if (!audio.paused) measure('german-v2'); hud(); }
+    if (owner === 'hero' || pianoBusy()) { listenKeys(); drawPiano(performance.now()); }
     if (owner === 'ab') { drawWave($('#abWave'), abName, p); $('#abTime').textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; if (!audio.paused) measure(); drawLive(); }
     if (owner instanceof Element) { const c = $('canvas', owner); if (c) drawWave(c, owner.dataset.src, p); }
-    if (!audio.paused) raf = requestAnimationFrame(tick);
+    if (!audio.paused || pianoBusy()) raf = requestAnimationFrame(tick); // let the keys settle after a pause
   }
   audio.addEventListener('play', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); });
   audio.addEventListener('pause', () => { cancelAnimationFrame(raf); tick(); });
@@ -163,56 +162,107 @@
     setTimeout(() => $('#gateSound').focus({ preventScroll: true }), 50);
   } else gate.hidden = true;
 
-  /* ---------- hero scope: live spectrum bars, the Roland curve and our measured curve ---------- */
-  const F0 = 30, F1 = 16000, lx = f => Math.log(f / F0) / Math.log(F1 / F0);
-  let bars = null;
-  function drawScope() {
-    const c = $('#scopeCanvas'); if (!c) return;
-    const [x, w, h] = fit(c); x.clearRect(0, 0, w, h);
-    const N = Math.max(40, Math.min(120, Math.floor(w / 10))), live = owner === 'hero' && !audio.paused && !!analyser;
-    if (!bars || bars.length !== N) bars = new Float32Array(N);
-    const G = D.sets.german, top = 8, Y = v => top + (-Math.max(-70, Math.min(0, v))) / 70 * (h - top - 18);
-    const bandAt = (arr, f) => { const q = Math.log2(f / D.bands[0]), i = Math.max(0, Math.min(8, Math.floor(q))), k = Math.max(0, Math.min(1, q - i)); return arr[i] + (arr[i + 1] - arr[i]) * k; };
-    const hz = live ? actx.sampleRate / analyser.fftSize : 1;
-    for (let i = 0; i < N; i++) {
-      const fa = F0 * Math.pow(F1 / F0, i / N), fb = F0 * Math.pow(F1 / F0, (i + 1) / N);
-      let target;
-      if (live) { let m = -140; for (let j = Math.floor(fa / hz); j <= Math.ceil(fb / hz); j++) m = Math.max(m, fbuf[j]); target = Math.max(0, Math.min(1, (m + 100) / 75)); }
-      else target = .18 * Math.max(0, 1 + bandAt(G.after.bands, Math.sqrt(fa * fb)) / 70);
-      bars[i] = reduce ? target : Math.max(target, bars[i] * .9);
-      const bw = w / N, bh = Math.max(2, bars[i] * (h - top - 18));
-      x.fillStyle = live ? 'rgba(228,73,43,.5)' : 'rgba(244,242,238,.14)';
-      x.fillRect(i * bw + bw * .2, h - 18 - bh, bw * .6, bh);
+  /* ---------- hero piano: the drawing plays along with the real audio ----------
+     Each of the 88 keys listens to its own fundamental in the analyser. A key goes down, its hammer lights
+     and its string vibrates only when that note is a local peak in the spectrum. Same geometry as
+     tools/landing/draw_art.py. */
+  const PW = 760, PH = 1000, INK = '244,242,238', ACC = '255,93,61';
+  const bez = (p0, p1, p2, p3, n = 40) => { const o = []; for (let i = 1; i <= n; i++) { const q = i / n, a = (1 - q) ** 3, b = 3 * (1 - q) ** 2 * q, c = 3 * (1 - q) * q * q, d = q ** 3; o.push([a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0], a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]]); } return o; };
+  const INNER = [[78, 870], [78, 232], ...bez([78, 232], [78, 136], [148, 84], [230, 90]), ...bez([230, 90], [318, 100], [354, 184], [382, 306]), ...bez([382, 306], [412, 450], [486, 536], [588, 576]), ...bez([588, 576], [642, 598], [672, 632], [672, 690]), [672, 870]];
+  const OUTER = [[60, 880], [60, 230], ...bez([60, 230], [60, 120], [140, 60], [230, 70]), ...bez([230, 70], [330, 82], [372, 170], [400, 300]), ...bez([400, 300], [430, 440], [500, 520], [600, 560]), ...bez([600, 560], [660, 585], [690, 620], [690, 690]), [690, 880]];
+  const topY = x => { let m = Infinity; for (let i = 0; i < INNER.length; i++) { const [x1, y1] = INNER[i], [x2, y2] = INNER[(i + 1) % INNER.length]; if ((x1 - x) * (x2 - x) <= 0 && x1 !== x2) m = Math.min(m, y1 + (y2 - y1) * (x - x1) / (x2 - x1)); } return m; };
+  const KX0 = 72, KX1 = 678, KY0 = 880, KY1 = 970, KW = (KX1 - KX0) / 52;
+  const KEYS = []; {
+    let w = 0;
+    for (let k = 0; k < 88; k++) {
+      const black = [1, 3, 6, 8, 10].includes((k + 9) % 12), x = 92 + k * (568 / 87);
+      const ex = k < 20 ? x + 70 - k * 1.3 : x, ey = topY(ex) + (k < 20 ? 16 : 14);
+      KEYS.push({ black, f: 27.5 * Math.pow(2, k / 12), kx: black ? KX0 + w * KW - 3.6 : KX0 + w * KW, sx: x, ex, ey });
+      if (!black) w++;
     }
-    const curve = (arr, col, lw) => {
-      x.strokeStyle = col; x.lineWidth = lw; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath();
-      for (let k = 0; k <= 80; k++) { const f = 40 * Math.pow(14000 / 40, k / 80), X = lx(f) * w, Yv = Y(bandAt(arr, f)); if (k) x.lineTo(X, Yv); else x.moveTo(X, Yv); }
-      x.stroke();
-    };
-    curve(G.ref.bands, 'rgba(244,242,238,.9)', 2);
-    const a = acc['german-v2'], mine = a && a.n > 20 ? levels(a) : G.after.bands;
-    curve(mine, css('--accent'), 3);
-    x.font = `10px ${css('--mono')}`; x.fillStyle = 'rgba(244,242,238,.45)'; x.textAlign = 'center';
-    [[63, '63'], [250, '250'], [1000, '1k'], [4000, '4k'], [11000, '11k Hz']].forEach(([f, l]) => x.fillText(l, lx(f) * w, h - 4));
-    const rd = $('#scopeRead');
-    if (a && a.n > 20) rd.innerHTML = `<strong>${gap(levels(a), G.ref.bands).toFixed(1)} dB</strong> ${t('scope.live')}`;
+  }
+  const act = new Float32Array(88), avgDb = new Float32Array(88).fill(-110), lvl = new Float32Array(88);
+  function listenKeys() {
+    const on = owner === 'hero' && !audio.paused && analyser;
+    if (!on) { for (let k = 0; k < 88; k++) act[k] *= .86; return; }
+    const hz = actx.sampleRate / analyser.fftSize;
+    for (let k = 0; k < 88; k++) {
+      const f = KEYS[k].f, lo = Math.max(1, Math.floor(f * .985 / hz)), hi = Math.max(lo, Math.ceil(f * 1.015 / hz));
+      let m = -160; for (let j = lo; j <= hi; j++) m = Math.max(m, fbuf[j]); lvl[k] = m;
+    }
+    for (let k = 0; k < 88; k++) {
+      const m = lvl[k], peak = m >= (lvl[k - 1] ?? -160) - .5 && m >= (lvl[k + 1] ?? -160) - .5;
+      avgDb[k] = avgDb[k] * .97 + m * .03;
+      const hit = peak ? Math.max(0, Math.min(1, (m - Math.max(avgDb[k], -88) - 2) / 12)) : 0;
+      act[k] = Math.max(hit, act[k] * .86);
+    }
+  }
+  const pianoBase = document.createElement('canvas');
+  let baseKey = '';
+  function drawBase(w, h, dpr, s) {
+    pianoBase.width = Math.round(w * dpr); pianoBase.height = Math.round(h * dpr);
+    const x = pianoBase.getContext('2d'); x.setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+    const lw = 1 / s, poly = (pts, a) => { x.beginPath(); pts.forEach(([px, py], i) => i ? x.lineTo(px, py) : x.moveTo(px, py)); x.closePath(); x.strokeStyle = `rgba(${INK},${a})`; x.lineWidth = lw; x.stroke(); };
+    x.lineCap = x.lineJoin = 'round';
+    poly(OUTER, .9); poly(INNER, .45);
+    x.strokeStyle = `rgba(${INK},.85)`; x.lineWidth = lw; x.beginPath();
+    for (let px = 180; px <= 664; px += 6) { const py = topY(px) + 34; px === 180 ? x.moveTo(px, py) : x.lineTo(px, py); }
+    x.stroke();
+    x.strokeStyle = `rgba(${INK},.4)`;
+    [[210, 846, 224, 620, 262, 360, 236, 120], [420, 846, 426, 700, 470, 590, 540, 548], [130, 846, 140, 600, 150, 300, 150, 140]].forEach(c => { x.beginPath(); x.moveTo(c[0], c[1]); x.bezierCurveTo(c[2], c[3], c[4], c[5], c[6], c[7]); x.stroke(); });
+    x.fillStyle = `rgba(${INK},.9)`;
+    for (let i = 0; i < 88; i++) { x.beginPath(); x.arc(92 + i * (568 / 87), 852 + (i % 2 ? 6 : 0), 1.5, 0, 7); x.fill(); }
+    x.strokeStyle = `rgba(${INK},.9)`; x.beginPath(); x.moveTo(78, 840); x.lineTo(672, 840); x.moveTo(48, 976); x.lineTo(702, 976); x.stroke();
+    [[48, 868], [678, 868]].forEach(([cx, cy]) => { x.strokeRect(cx, cy, 24, 108); });
+  }
+  function drawPiano(now = 0) {
+    const c = $('#pianoCanvas'); if (!c || !c.clientWidth) return;
+    const dpr = Math.min(devicePixelRatio || 1, 2), w = c.clientWidth, h = c.clientHeight, s = w / PW;
+    if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+    const key = c.width + 'x' + c.height; if (key !== baseKey) { drawBase(w, h, dpr, s); baseKey = key; }
+    const x = c.getContext('2d');
+    x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); x.drawImage(pianoBase, 0, 0);
+    x.setTransform(dpr * s, 0, 0, dpr * s, 0, 0); x.lineCap = 'round';
+    const lw = 1 / s;
+    for (let k = 0; k < 88; k++) { // hammers under the strings
+      const a = act[k]; x.fillStyle = `rgba(${ACC},${.45 + a * .55})`;
+      x.fillRect(KEYS[k].sx - 1.6 - a, 824 - a * 6, 3.2 + a * 2, 9);
+    }
+    for (let k = 0; k < 88; k++) { // strings, vibrating with their key
+      const K = KEYS[k], a = act[k], amp = reduce ? 0 : a * 5 * Math.sin(now * (.035 + k * .0009) + k);
+      x.strokeStyle = a > .05 ? `rgba(${ACC},${.35 + a * .65})` : `rgba(${INK},${k % 3 ? .2 : .42})`;
+      x.lineWidth = lw * (1 + a); x.beginPath(); x.moveTo(K.sx, 842);
+      x.quadraticCurveTo((K.sx + K.ex) / 2 + amp, (842 + K.ey) / 2, K.ex, K.ey); x.stroke();
+    }
+    for (let k = 20; k <= 68; k++) { // dampers lift off their string while the key is down
+      const K = KEYS[k], a = act[k]; x.fillStyle = '#0e0e10'; x.strokeStyle = `rgba(${INK},.8)`; x.lineWidth = lw;
+      x.beginPath(); x.roundRect(K.sx - 2.4, 784 - a * 10, 4.8, 14, 1); x.fill(); x.stroke();
+    }
+    x.lineWidth = lw;
+    KEYS.forEach((K, k) => { if (K.black) return; const a = act[k]; // white keys, then black keys on top
+      x.fillStyle = a > .05 ? `rgba(${ACC},${.25 + a * .75})` : '#0e0e10'; x.strokeStyle = `rgba(${INK},.85)`;
+      x.beginPath(); x.roundRect(K.kx, KY0 + a * 2, KW, KY1 - KY0, 1.5); x.fill(); x.stroke(); });
+    KEYS.forEach((K, k) => { if (!K.black) return; const a = act[k];
+      x.fillStyle = a > .05 ? `rgba(${ACC},${.4 + a * .6})` : '#2a2a30'; x.strokeStyle = `rgba(${INK},.85)`;
+      x.beginPath(); x.roundRect(K.kx, KY0 + a * 2, 7.2, 52, 1); x.fill(); x.stroke(); });
+  }
+  const pianoBusy = () => act.some(v => v > .01);
+  function hud() {
+    const a = acc['german-v2'], rd = $('#scopeRead');
+    if (a && a.n > 20) rd.innerHTML = `<strong>${gap(levels(a), D.sets.german.ref.bands).toFixed(1)} dB</strong> ${t('scope.live')}`;
     else rd.textContent = t('scope.idle');
   }
-
-  /* ---------- story: hear the lean, the needle follows the real left/right levels ---------- */
-  function hearing() { return owner instanceof Element && owner.classList.contains('hear'); }
-  let balS = 0, sumL = 0, sumR = 0; // running energy since the take started, so the reading converges like the offline measurement
-  $$('.hear').forEach(b => b.addEventListener('click', () => { if (owner !== b) { sumL = 0; sumR = 0; } toggle(b.dataset.src, b); }));
-  function liveBalance() {
-    if (!aL) return;
-    aL.getFloatTimeDomainData(tL); aR.getFloatTimeDomainData(tR);
-    let l = 0, r = 0; for (let i = 0; i < tL.length; i++) { l += tL[i] * tL[i]; r += tR[i] * tR[i]; }
-    if (l + r < 1e-7) return;
-    sumL += l; sumR += r; balS = 10 * Math.log10(sumL / sumR);
-    const half = $('.meter__track').clientWidth / 2;
-    $('#needle').style.transform = `translateX(${-Math.max(-1, Math.min(1, balS / 10)) * half}px)`; // positive dB = left louder
-    $('#storyRead').innerHTML = `${t('sr.live')} · ${balS > 1 ? t('sr.left') : t('sr.balance')} <b>${balS > 0 ? '+' : ''}${balS.toFixed(1)} dB</b>`;
+  if (!reduce && matchMedia('(pointer: fine)').matches) { // the piano leans toward the cursor
+    const p3 = $('#piano3d'); let pr = 0;
+    $('#stage').addEventListener('pointermove', e => { cancelAnimationFrame(pr); pr = requestAnimationFrame(() => {
+      const r = $('#stage').getBoundingClientRect();
+      p3.style.setProperty('--tx', ((e.clientX - r.left) / r.width - .5).toFixed(3)); p3.style.setProperty('--ty', ((e.clientY - r.top) / r.height - .5).toFixed(3));
+    }); });
   }
+
+  /* ---------- story: hear V1 and V2 ---------- */
+  function hearing() { return owner instanceof Element && owner.classList.contains('hear'); }
+  $$('.hear').forEach(b => b.addEventListener('click', () => toggle(b.dataset.src, b)));
 
   /* ---------- A/B console: switching keeps the playback position ---------- */
   let abName = 'german-v2';
@@ -290,7 +340,7 @@
 
 
   /* ---------- live analyzer: Web Audio octave bands, averaged per version, drawn over the reference ---------- */
-  let actx = null, analyser = null, fbuf = null, bandBins = null, totBins = null, aL = null, aR = null, tL = null, tR = null;
+  let actx = null, analyser = null, fbuf = null, bandBins = null, totBins = null;
   const acc = {}; // track name -> { sum: band power sums, tot: total power sum, n: frames }
   function ensureGraph() {
     if (actx) { if (actx.state === 'suspended') actx.resume(); return; }
@@ -299,9 +349,6 @@
       const node = actx.createMediaElementSource(audio);
       analyser = actx.createAnalyser(); analyser.fftSize = 8192; analyser.smoothingTimeConstant = 0;
       node.connect(analyser); analyser.connect(actx.destination);
-      const split = actx.createChannelSplitter(2); node.connect(split);
-      aL = actx.createAnalyser(); aR = actx.createAnalyser(); aL.fftSize = aR.fftSize = 2048;
-      split.connect(aL, 0); split.connect(aR, 1); tL = new Float32Array(2048); tR = new Float32Array(2048);
       fbuf = new Float32Array(analyser.frequencyBinCount);
       const hz = actx.sampleRate / analyser.fftSize;
       bandBins = D.bands.map(c => [Math.max(1, Math.ceil(c / Math.SQRT2 / hz)), Math.floor(c * Math.SQRT2 / hz)]);
@@ -352,19 +399,15 @@
   el('path', { class: 'ln', d: path(G.ref.bands), stroke: 'var(--ink)', 'stroke-width': 2.2 }, sv);
   const sBefore = el('path', { class: 'ln', d: path(G.before.bands), stroke: 'var(--faint)', 'stroke-width': 2, 'stroke-dasharray': '4 5' }, sv);
   const sAfter = el('path', { class: 'ln', d: path(G.after.bands), stroke: 'var(--accent)', 'stroke-width': 3 }, sv);
-  const UNBALANCED_DB = 7.25; // measured on the first V2 render (Imager P0 at 0.3)
   const STEPS = {
-    1: { before: 1, after: 0, bal: G.before.balance, read: () => `${t('sr.center')} <b>${G.before.centroid} Hz</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.centroid} Hz` },
-    2: { before: .35, after: 1, bal: G.before.balance, read: () => `${t('sr.center')} <b>${G.after.centroid} Hz</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.centroid} Hz` },
-    3: { before: 0, after: 1, bal: UNBALANCED_DB, read: () => `${t('sr.left')} <b>+${UNBALANCED_DB} dB</b>` },
-    4: { before: 0, after: 1, bal: G.after.balance, read: () => `${t('sr.balance')} <b>${G.after.balance.toFixed(2)} dB</b>&nbsp;&nbsp;${t('sr.width')} ${G.after.width} (${t('sr.roland')} ${G.ref.width})` }
+    1: { before: 1, after: 0, read: () => `${t('sr.center')} <b>${G.before.centroid} Hz</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.centroid} Hz` },
+    2: { before: .35, after: 1, read: () => `${t('sr.center')} <b>${G.after.centroid} Hz</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.centroid} Hz` },
+    3: { before: 0, after: 1, read: () => `${t('sr.width')} <b>${G.after.width}</b>&nbsp;&nbsp;${t('sr.roland')} ${G.ref.width}&nbsp;&nbsp;·&nbsp;&nbsp;${t('sr.center')} <b>${G.after.centroid} Hz</b>` }
   };
   let step = 1;
   function setStep(n) {
     step = n; const st = STEPS[n];
     sBefore.style.opacity = st.before; sAfter.style.opacity = st.after;
-    const half = $('.meter__track').clientWidth / 2;
-    $('#needle').style.transform = `translateX(${-Math.max(-1, Math.min(1, st.bal / 10)) * half}px)`; // positive dB = left louder
     $('#storyRead').innerHTML = st.read();
     $$('.step').forEach(s2 => s2.classList.toggle('is-active', +s2.dataset.step === n));
   }
@@ -408,7 +451,7 @@
 
   /* ---------- paint everything; repaint on resize and theme change ---------- */
   function paint() {
-    drawSpec($('#miniSpec'), .45); drawScope();
+    drawSpec($('#miniSpec'), .45); drawPiano(); hud();
     drawWave($('#abWave'), abName, owner === 'ab' && audio.duration ? audio.currentTime / audio.duration : 0);
     $$('.take').forEach(t2 => drawWave($('canvas', t2), t2.dataset.src, 0));
     drawVel(); drawLive(); setStep(step);

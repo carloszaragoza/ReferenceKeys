@@ -57,7 +57,7 @@
 <main id="main">
   <!-- STAGE: giant wordmark over the hammers, the live analyzer is the hero object -->
   <section class="stage" id="stage">
-    <img class="stage__art" src="assets/art/piano-top.svg" width="760" height="1000" alt="" aria-hidden="true" fetchpriority="high">
+    <div class="piano3d" id="piano3d" aria-hidden="true"><div class="piano3d__in"><canvas id="pianoCanvas"></canvas></div></div>
     <div class="wrap stage__in">
       <p class="stage__kicker num" data-i18n="hero.kicker">Keyscape · Omnisphere · Free presets</p>
       <h1 class="wordmark" aria-label="ReferenceKeys"><span class="wm"><span>Reference</span></span><span class="wm wm--hot"><span>Keys</span></span></h1>
@@ -71,14 +71,10 @@
           <a class="btn btn--glass js-download" href="#"><span class="icon i-download" aria-hidden="true"></span><span data-i18n="cta.download">Download presets</span></a>
         </div>
       </div>
-      <figure class="scope" id="scope">
-        <canvas id="scopeCanvas" aria-hidden="true"></canvas>
+      <div class="hud">
         <div class="scope__bar" aria-hidden="true"><i id="scopeHead"></i></div>
-        <figcaption class="scope__foot">
-          <span class="scope__read num" id="scopeRead" aria-live="polite"></span>
-          <span class="scope__lg"><i class="k k--ref"></i>Roland German Concert<i class="k k--me"></i>CZ German Concert V2</span>
-        </figcaption>
-      </figure>
+        <p class="scope__read num" id="scopeRead" aria-live="polite"></p>
+      </div>
     </div>
   </section>
 
@@ -86,7 +82,7 @@
   <section class="proof wrap" aria-label="Measurements">
     <div class="proof__item reveal"><b class="num">±3<small> dB</small></b><span data-i18n="proof.1">Royal 3D vs the Nord, every octave from 32 Hz to 8 kHz</span></div>
     <div class="proof__item reveal"><b class="num">469<small> / 477 Hz</small></b><span data-i18n="proof.2">German Concert V2 brightness center vs the Roland</span></div>
-    <div class="proof__item reveal"><b class="num">0.06<small> dB</small></b><span data-i18n="proof.3">Left and right balance after the fix</span></div>
+    <div class="proof__item reveal"><b class="num">0.45<small> / 0.45</small></b><span data-i18n="proof.3">German Concert V2 stereo width vs the Roland</span></div>
     <div class="proof__item reveal"><b class="num">19<small> to </small>111</b><span data-i18n="proof.4">Velocities measured on a Yamaha MX88</span></div>
   </section>
 
@@ -95,25 +91,19 @@
   <section class="story" id="story">
     <div class="wrap">
       <h2 class="h2 reveal" data-i18n="story.title">The German Concert case</h2>
-      <p class="lead reveal" data-i18n="story.lead">One preset, nine renders, one mistake caught by the numbers.</p>
+      <p class="lead reveal" data-i18n="story.lead">One preset, nine renders, measured until it matched.</p>
       <div class="story__photo">
         <img src="assets/art/strings.svg" width="1680" height="720" loading="lazy" alt="Line drawing of piano strings, tuning pins, red felt and dampers">
       </div>
       <div class="story__grid">
         <div class="story__visual" id="storyVis" data-step="1" aria-hidden="true">
           <svg id="storyChart" viewBox="0 0 760 360"></svg>
-          <div class="meter">
-            <span class="meter__lbl">L</span>
-            <div class="meter__track"><i class="meter__mid"></i><b class="meter__needle" id="needle"></b></div>
-            <span class="meter__lbl">R</span>
-          </div>
           <div class="story__read num" id="storyRead"></div>
         </div>
         <ol class="story__steps">
-          <li class="step" data-step="1"><span class="step__n" aria-hidden="true">01</span><h3 class="h3" data-i18n="st1.t">Version 1 sounded dark</h3><p data-i18n="st1.p">Built by ear from a description. Measured against the Roland, it had 12 dB too much deep bass and its brightness center sat at 220 Hz instead of 477.</p></li>
+          <li class="step" data-step="1"><span class="step__n" aria-hidden="true">01</span><h3 class="h3" data-i18n="st1.t">Version 1 sounded dark</h3><p data-i18n="st1.p">Built by ear from a description. Measured against the Roland, it had 12 dB too much deep bass and its brightness center sat at 220 Hz instead of 477.</p><button class="hear" type="button" data-src="german-v1" aria-pressed="false"><span class="icon i-play" aria-hidden="true"></span><span data-i18n="hear.v1">Hear V1</span></button></li>
           <li class="step" data-step="2"><span class="step__n" aria-hidden="true">02</span><h3 class="h3" data-i18n="st2.t">Nine renders later</h3><p data-i18n="st2.p">Same MIDI, rendered through every variant. Lo Boost off, the high shelf moved from 18 kHz to 8 kHz. The curve landed on the reference.</p></li>
-          <li class="step" data-step="3"><span class="step__n" aria-hidden="true">03</span><h3 class="h3" data-i18n="st3.t">Then it leaned left</h3><p data-i18n="st3.p">The stereo control I used was actually a balance knob. The width number looked perfect, but the piano sat 7 dB to the left. I heard it on the first play.</p><button class="hear" type="button" data-src="german-v2-unbalanced" aria-pressed="false"><span class="icon i-play" aria-hidden="true"></span><span data-i18n="hear.lean">Hear the lean</span></button><small class="hear__hint" data-i18n="hear.hint">Headphones make the 7 dB obvious.</small></li>
-          <li class="step" data-step="4"><span class="step__n" aria-hidden="true">04</span><h3 class="h3" data-i18n="st4.t">Fixed, then shipped</h3><p data-i18n="st4.p">The real width control, measured again: centered within 0.06 dB and the same width as the Roland.</p><button class="hear" type="button" data-src="german-v2" aria-pressed="false"><span class="icon i-play" aria-hidden="true"></span><span data-i18n="hear.fix">Hear the fix</span></button></li>
+          <li class="step" data-step="3"><span class="step__n" aria-hidden="true">03</span><h3 class="h3" data-i18n="st3.t">Matched, then shipped</h3><p data-i18n="st3.p">Brightness center at 469 Hz against the Roland's 477, and the same stereo width. That is the version in the pack.</p><button class="hear" type="button" data-src="german-v2" aria-pressed="false"><span class="icon i-play" aria-hidden="true"></span><span data-i18n="hear.v2">Hear V2</span></button></li>
         </ol>
       </div>
     </div>
@@ -208,7 +198,7 @@
       </article>
       <article class="cell cell--tune reveal">
         <h3 class="h3" data-i18n="m4.t">Tune, then check again</h3>
-        <p data-i18n="m4.p">Nine render passes for German Concert V2. One of them caught a 7 dB lean to the left before it shipped.</p>
+        <p data-i18n="m4.p">Nine render passes for German Concert V2, each one measured before the next change.</p>
         <ul class="knobs num" aria-label="German Concert V2 changes">
           <li><span>Lo Boost</span><b>0.25 <i class="icon i-arrow-right" aria-hidden="true"></i> 0</b></li>
           <li><span>Hi Freq</span><b>18k <i class="icon i-arrow-right" aria-hidden="true"></i> 8k</b></li>
