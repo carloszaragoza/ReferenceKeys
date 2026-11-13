@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Off key · ReferenceKeys</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0e0e10">
+<link rel="icon" href="/ReferenceKeys/assets/favicon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:"Big Shoulders Display";src:url(/ReferenceKeys/assets/fonts/big-shoulders-800.woff2) format("woff2");font-weight:800;font-display:swap}
+@font-face{font-family:"Geist";src:url(/ReferenceKeys/assets/fonts/geist-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{--bg:#0e0e10;--ink:#f4f2ee;--muted:rgba(244,242,238,.62);--accent:#ff5d3d}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;display:grid;place-content:center;gap:20px;padding:24px 16px;background:var(--bg);color:var(--ink);font:500 17px/1.5 "Geist",system-ui,sans-serif;text-align:center}
+h1{margin:0;font:800 clamp(120px,34vw,360px)/.8 "Big Shoulders Display","Arial Narrow",sans-serif;letter-spacing:-.01em}
+h1 span{color:var(--accent)}
+h2{margin:0;font:800 clamp(2rem,6vw,3.4rem)/.95 "Big Shoulders Display","Arial Narrow",sans-serif;text-transform:uppercase}
+p{margin:0;color:var(--muted)}
+a{justify-self:center;display:inline-block;margin-top:8px;padding:.9em 1.5em;border-radius:999px;background:var(--accent);color:#141416;text-decoration:none}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+</style>
+</head>
+<body>
+<h1>4<span>0</span>4</h1>
+<h2 data-k="404.t">Off key.</h2>
+<p data-k="404.p">This page doesn't exist. The presets do.</p>
+<a href="/ReferenceKeys/" data-k="404.cta">Back to ReferenceKeys</a>
+<script src="/ReferenceKeys/locales/en.js"></script>
+<script src="/ReferenceKeys/locales/es.js"></script>
+<script>
+(function () {
+  var L = window.RK_LOCALES; if (!L) return;
+  var lang = null; try { lang = localStorage.getItem('rk-lang'); } catch (e) {}
+  if (!lang) lang = (navigator.languages || [navigator.language || 'en']).some(function (l) { return /^es\b/i.test(l); }) ? 'es' : 'en';
+  document.documentElement.lang = lang;
+  [].forEach.call(document.querySelectorAll('[data-k]'), function (el) { var v = (L[lang] || {})[el.dataset.k]; if (v) el.textContent = v; });
+})();
+</script>
+</body>
+</html>

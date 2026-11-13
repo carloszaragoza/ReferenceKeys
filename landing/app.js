@@ -22,7 +22,7 @@
     document.title = 'ReferenceKeys';
     renderSet(currentSet, false);
     syncPlayLabels();
-    setStep(step); drawLive();
+    setStep(step); drawLive(); drawScope();
   }
   $('#lang').addEventListener('click', () => { lang = lang === 'es' ? 'en' : 'es'; store.set('rk-lang', lang); applyLang(); });
 
@@ -33,7 +33,17 @@
   const audio = $('#player');
   /* Each track is fetched once into a Blob URL: always seekable, so A/B switches keep their position on any host. */
   const blobs = {};
-  const fetchTrack = n => blobs[n] || (blobs[n] = fetch(`assets/audio/${n}.mp3`).then(r => r.blob()).then(b => URL.createObjectURL(b)));
+  function fetchTrack(n, onProgress) {
+    if (blobs[n]) return blobs[n];
+    return (blobs[n] = (async () => {
+      const r = await fetch(`assets/audio/${n}.mp3`);
+      const len = +r.headers.get('content-length') || 0, rd = onProgress && len && r.body && r.body.getReader();
+      if (!rd) { const b = await r.blob(); onProgress && onProgress(1); return URL.createObjectURL(b); }
+      const parts = []; let got = 0;
+      for (;;) { const { done, value } = await rd.read(); if (done) break; parts.push(value); got += value.length; onProgress(got / len); }
+      onProgress(1); return URL.createObjectURL(new Blob(parts, { type: 'audio/mpeg' }));
+    })());
+  }
   let current = null; // name of the track loaded in <audio>
   let owner = null; // 'hero' | 'ab' | take element
   async function load(name, at = 0, who, autoplay = true) {
@@ -56,12 +66,16 @@
   const fmt = s => isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}` : '0:00';
   function setIcon(btn, playing) {
     const i = btn.querySelector('.icon'); i.classList.toggle('i-play', !playing); i.classList.toggle('i-pause', playing);
-    btn.setAttribute('aria-label', playing ? t('pause') : t('play'));
+    const txt = btn.querySelector('.btn__txt');
+    if (txt) txt.textContent = playing ? t('pause') : t('cta.play'); // visible label, no aria-label override
+    else if (btn.classList.contains('hear')) btn.setAttribute('aria-pressed', String(playing));
+    else btn.setAttribute('aria-label', playing ? t('pause') : t('play'));
   }
   function syncPlayLabels() {
     const p = !audio.paused;
-    setIcon($('#specPlay'), p && owner === 'hero');
-    $('#spec').classList.toggle('is-playing', p && owner === 'hero');
+    setIcon($('#heroPlay'), p && owner === 'hero');
+    $$('.hear').forEach(b => setIcon(b, p && owner === b));
+    if (!(p && hearing())) setStep(step);
     setIcon($('#abPlay'), p && owner === 'ab');
     $$('.take').forEach(el => { const on = p && owner === el; setIcon($('.take__play', el), on); el.classList.toggle('is-playing', on); });
   }
@@ -71,9 +85,10 @@
   let raf = 0;
   function tick() {
     const p = audio.duration ? audio.currentTime / audio.duration : 0;
-    if (owner === 'hero') { const s = $('#spec'); $('#specHead').style.transform = `translateX(${p * s.clientWidth}px)`; }
+    if (owner === 'hero') { $('#scopeHead').style.transform = `scaleX(${p})`; if (!audio.paused) measure('german-v2'); drawScope(); }
+    if (hearing() && !audio.paused) liveBalance();
     if (owner === 'ab') { drawWave($('#abWave'), abName, p); $('#abTime').textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; if (!audio.paused) measure(); drawLive(); }
-    if (owner instanceof Element) { const c = $('canvas', owner); drawWave(c, owner.dataset.src, p); }
+    if (owner instanceof Element) { const c = $('canvas', owner); if (c) drawWave(c, owner.dataset.src, p); }
     if (!audio.paused) raf = requestAnimationFrame(tick);
   }
   audio.addEventListener('play', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); });
@@ -127,7 +142,77 @@
   }
 
   /* ---------- hero ---------- */
-  $('#specPlay').addEventListener('click', () => toggle('german-v2', 'hero'));
+  $('#heroPlay').addEventListener('click', () => toggle('german-v2', 'hero'));
+
+  /* ---------- gate: one choice, sound or silence; preloads the demo meanwhile ---------- */
+  const gate = $('#gate'), root = document.documentElement;
+  if (root.classList.contains('gated')) {
+    fetchTrack('german-v2', f => { const pc = Math.round(f * 100) + '%'; $('#gateBar').style.setProperty('--p', pc); $('#gatePct').textContent = pc; });
+    const enter = sound => {
+      try { sessionStorage.setItem('rk-gate', '1'); } catch {}
+      gate.classList.add('is-out'); root.classList.remove('gated');
+      setTimeout(() => { gate.hidden = true; }, reduce ? 0 : 900);
+      if (sound) load('german-v2', 0, 'hero'); else $('#heroPlay').focus({ preventScroll: true });
+    };
+    $('#gateSound').addEventListener('click', () => enter(true));
+    $('#gateQuiet').addEventListener('click', () => enter(false));
+    gate.addEventListener('keydown', e => {
+      if (e.key === 'Escape') enter(false);
+      if (e.key === 'Tab') { const a = $('#gateSound'), b = $('#gateQuiet'); if (e.shiftKey && document.activeElement === a) { e.preventDefault(); b.focus(); } else if (!e.shiftKey && document.activeElement === b) { e.preventDefault(); a.focus(); } }
+    });
+    setTimeout(() => $('#gateSound').focus({ preventScroll: true }), 50);
+  } else gate.hidden = true;
+
+  /* ---------- hero scope: live spectrum bars, the Roland curve and our measured curve ---------- */
+  const F0 = 30, F1 = 16000, lx = f => Math.log(f / F0) / Math.log(F1 / F0);
+  let bars = null;
+  function drawScope() {
+    const c = $('#scopeCanvas'); if (!c) return;
+    const [x, w, h] = fit(c); x.clearRect(0, 0, w, h);
+    const N = Math.max(40, Math.min(120, Math.floor(w / 10))), live = owner === 'hero' && !audio.paused && !!analyser;
+    if (!bars || bars.length !== N) bars = new Float32Array(N);
+    const G = D.sets.german, top = 8, Y = v => top + (-Math.max(-70, Math.min(0, v))) / 70 * (h - top - 18);
+    const bandAt = (arr, f) => { const q = Math.log2(f / D.bands[0]), i = Math.max(0, Math.min(8, Math.floor(q))), k = Math.max(0, Math.min(1, q - i)); return arr[i] + (arr[i + 1] - arr[i]) * k; };
+    const hz = live ? actx.sampleRate / analyser.fftSize : 1;
+    for (let i = 0; i < N; i++) {
+      const fa = F0 * Math.pow(F1 / F0, i / N), fb = F0 * Math.pow(F1 / F0, (i + 1) / N);
+      let target;
+      if (live) { let m = -140; for (let j = Math.floor(fa / hz); j <= Math.ceil(fb / hz); j++) m = Math.max(m, fbuf[j]); target = Math.max(0, Math.min(1, (m + 100) / 75)); }
+      else target = .18 * Math.max(0, 1 + bandAt(G.after.bands, Math.sqrt(fa * fb)) / 70);
+      bars[i] = reduce ? target : Math.max(target, bars[i] * .9);
+      const bw = w / N, bh = Math.max(2, bars[i] * (h - top - 18));
+      x.fillStyle = live ? 'rgba(228,73,43,.5)' : 'rgba(244,242,238,.14)';
+      x.fillRect(i * bw + bw * .2, h - 18 - bh, bw * .6, bh);
+    }
+    const curve = (arr, col, lw) => {
+      x.strokeStyle = col; x.lineWidth = lw; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath();
+      for (let k = 0; k <= 80; k++) { const f = 40 * Math.pow(14000 / 40, k / 80), X = lx(f) * w, Yv = Y(bandAt(arr, f)); if (k) x.lineTo(X, Yv); else x.moveTo(X, Yv); }
+      x.stroke();
+    };
+    curve(G.ref.bands, 'rgba(244,242,238,.9)', 2);
+    const a = acc['german-v2'], mine = a && a.n > 20 ? levels(a) : G.after.bands;
+    curve(mine, css('--accent'), 3);
+    x.font = `10px ${css('--mono')}`; x.fillStyle = 'rgba(244,242,238,.45)'; x.textAlign = 'center';
+    [[63, '63'], [250, '250'], [1000, '1k'], [4000, '4k'], [11000, '11k Hz']].forEach(([f, l]) => x.fillText(l, lx(f) * w, h - 4));
+    const rd = $('#scopeRead');
+    if (a && a.n > 20) rd.innerHTML = `<strong>${gap(levels(a), G.ref.bands).toFixed(1)} dB</strong> ${t('scope.live')}`;
+    else rd.textContent = t('scope.idle');
+  }
+
+  /* ---------- story: hear the lean, the needle follows the real left/right levels ---------- */
+  function hearing() { return owner instanceof Element && owner.classList.contains('hear'); }
+  let balS = 0, sumL = 0, sumR = 0; // running energy since the take started, so the reading converges like the offline measurement
+  $$('.hear').forEach(b => b.addEventListener('click', () => { if (owner !== b) { sumL = 0; sumR = 0; } toggle(b.dataset.src, b); }));
+  function liveBalance() {
+    if (!aL) return;
+    aL.getFloatTimeDomainData(tL); aR.getFloatTimeDomainData(tR);
+    let l = 0, r = 0; for (let i = 0; i < tL.length; i++) { l += tL[i] * tL[i]; r += tR[i] * tR[i]; }
+    if (l + r < 1e-7) return;
+    sumL += l; sumR += r; balS = 10 * Math.log10(sumL / sumR);
+    const half = $('.meter__track').clientWidth / 2;
+    $('#needle').style.transform = `translateX(${-Math.max(-1, Math.min(1, balS / 10)) * half}px)`; // positive dB = left louder
+    $('#storyRead').innerHTML = `${t('sr.live')} · ${balS > 1 ? t('sr.left') : t('sr.balance')} <b>${balS > 0 ? '+' : ''}${balS.toFixed(1)} dB</b>`;
+  }
 
   /* ---------- A/B console: switching keeps the playback position ---------- */
   let abName = 'german-v2';
@@ -205,7 +290,7 @@
 
 
   /* ---------- live analyzer: Web Audio octave bands, averaged per version, drawn over the reference ---------- */
-  let actx = null, analyser = null, fbuf = null, bandBins = null, totBins = null;
+  let actx = null, analyser = null, fbuf = null, bandBins = null, totBins = null, aL = null, aR = null, tL = null, tR = null;
   const acc = {}; // track name -> { sum: band power sums, tot: total power sum, n: frames }
   function ensureGraph() {
     if (actx) { if (actx.state === 'suspended') actx.resume(); return; }
@@ -214,19 +299,22 @@
       const node = actx.createMediaElementSource(audio);
       analyser = actx.createAnalyser(); analyser.fftSize = 8192; analyser.smoothingTimeConstant = 0;
       node.connect(analyser); analyser.connect(actx.destination);
+      const split = actx.createChannelSplitter(2); node.connect(split);
+      aL = actx.createAnalyser(); aR = actx.createAnalyser(); aL.fftSize = aR.fftSize = 2048;
+      split.connect(aL, 0); split.connect(aR, 1); tL = new Float32Array(2048); tR = new Float32Array(2048);
       fbuf = new Float32Array(analyser.frequencyBinCount);
       const hz = actx.sampleRate / analyser.fftSize;
       bandBins = D.bands.map(c => [Math.max(1, Math.ceil(c / Math.SQRT2 / hz)), Math.floor(c * Math.SQRT2 / hz)]);
       totBins = [Math.ceil(30 / hz), Math.floor(16000 / hz)];
     } catch { actx = null; }
   }
-  function measure() {
+  function measure(name = abName) {
     if (!analyser) return;
     analyser.getFloatFrequencyData(fbuf);
     const pw = i => Math.pow(10, fbuf[i] / 10);
     let tot = 0; for (let i = totBins[0]; i <= totBins[1]; i++) tot += pw(i);
     if (!(tot > 1e-9)) return; // skip silence
-    const a = acc[abName] || (acc[abName] = { sum: new Float64Array(10), tot: 0, n: 0 });
+    const a = acc[name] || (acc[name] = { sum: new Float64Array(10), tot: 0, n: 0 });
     bandBins.forEach(([lo, hi], b) => { let s2 = 0; for (let i = lo; i <= hi; i++) s2 += pw(i); a.sum[b] += s2; });
     a.tot += tot; a.n++;
   }
@@ -320,7 +408,7 @@
 
   /* ---------- paint everything; repaint on resize and theme change ---------- */
   function paint() {
-    drawSpec($('#specCanvas')); drawSpec($('#miniSpec'), .45);
+    drawSpec($('#miniSpec'), .45); drawScope();
     drawWave($('#abWave'), abName, owner === 'ab' && audio.duration ? audio.currentTime / audio.duration : 0);
     $$('.take').forEach(t2 => drawWave($('canvas', t2), t2.dataset.src, 0));
     drawVel(); drawLive(); setStep(step);

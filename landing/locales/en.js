@@ -83,5 +83,22 @@ window.RK_LOCALES.en = {
   "live.now": "Now playing",
   "live.other": "Other version",
   "live.gap": "average gap to the Roland",
-  "foot.photos": "Photos: Kimberleigh Aleksandre (hammers), Hans Braxmeier (keys) and Kjethdubns (strings), public domain (CC0) via Wikimedia Commons."
+  "foot.photos": "Photos: Kimberleigh Aleksandre (hammers), Hans Braxmeier (keys) and Kjethdubns (strings), public domain (CC0) via Wikimedia Commons.",
+  "gate.eyebrow": "A listening room for piano presets",
+  "gate.t1": "Headphones",
+  "gate.t2": "on?",
+  "gate.sound": "Enter with sound",
+  "gate.quiet": "Enter in silence",
+  "gate.note": "Sound starts the live analyzer. You can change your mind later.",
+  "hero.kicker": "Keyscape · Omnisphere · Free presets",
+  "cta.play": "Play the demo",
+  "scope.idle": "Measured curves. Press play and your browser measures it live.",
+  "scope.live": "average gap to the Roland, measured live in your browser",
+  "hear.lean": "Hear the lean",
+  "hear.fix": "Hear the fix",
+  "hear.hint": "Headphones make the 7 dB obvious.",
+  "sr.live": "Live",
+  "404.t": "Off key.",
+  "404.p": "This page doesn't exist. The presets do.",
+  "404.cta": "Back to ReferenceKeys"
 };

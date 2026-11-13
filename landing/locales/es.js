@@ -83,5 +83,22 @@ window.RK_LOCALES.es = {
   "live.now": "Sonando ahora",
   "live.other": "La otra versión",
   "live.gap": "de diferencia promedio con el Roland",
-  "foot.photos": "Fotos: Kimberleigh Aleksandre (martillos), Hans Braxmeier (teclas) y Kjethdubns (cuerdas), dominio público (CC0) vía Wikimedia Commons."
+  "foot.photos": "Fotos: Kimberleigh Aleksandre (martillos), Hans Braxmeier (teclas) y Kjethdubns (cuerdas), dominio público (CC0) vía Wikimedia Commons.",
+  "gate.eyebrow": "Una sala de escucha para presets de piano",
+  "gate.t1": "¿Audífonos",
+  "gate.t2": "puestos?",
+  "gate.sound": "Entrar con sonido",
+  "gate.quiet": "Entrar en silencio",
+  "gate.note": "El sonido activa el analizador en vivo. Puedes cambiar de idea después.",
+  "hero.kicker": "Keyscape · Omnisphere · Presets gratis",
+  "cta.play": "Escuchar el demo",
+  "scope.idle": "Curvas medidas. Dale play y tu navegador la mide en vivo.",
+  "scope.live": "de diferencia promedio con el Roland, medida en vivo en tu navegador",
+  "hear.lean": "Escucha el desbalance",
+  "hear.fix": "Escucha la corrección",
+  "hear.hint": "Con audífonos los 7 dB se notan de inmediato.",
+  "sr.live": "En vivo",
+  "404.t": "Desafinado.",
+  "404.p": "Esta página no existe. Los presets sí.",
+  "404.cta": "Volver a ReferenceKeys"
 };
