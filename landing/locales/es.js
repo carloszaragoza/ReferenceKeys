@@ -8,7 +8,7 @@ window.RK_LOCALES.es = {
   "nav.presets": "Presets",
   "cta.download": "Descargar presets",
   "cta.listen": "Escuchar",
-  "hero.title": "Presets de piano calibrados contra <em>el original.</em>",
+  "hero.title": "Tres pianos de concierto, medidos contra <em>el original.</em>",
   "hero.sub": "Tres patches para Keyscape ajustados midiendo, cada uno banda por banda contra la grabación de un piano de concierto real.",
   "hero.cap": "CZ German Concert V2, renderizado desde mi propia interpretación. Toca para escuchar.",
   "proof.1": "Royal 3D contra el Nord, cada octava de 32 Hz a 8 kHz",
@@ -94,9 +94,5 @@ window.RK_LOCALES.es = {
   "foot.ds": "Sistema de diseño",
   "hear.v1": "Escucha V1",
   "hear.v2": "Escucha V2",
-  "spin.eyebrow": "Haz scroll para rodearlo",
-  "spin.title": "Nueve pies de piano de cola",
-  "spin.n1": "88 teclas, cada una escuchando el audio",
-  "spin.n2": "Tapa abierta, tres patas, tres pedales",
-  "spin.n3": "Cada línea, dibujada en código"
+  "film.lid": "Una referencia. Una meta: que suene igual."
 };

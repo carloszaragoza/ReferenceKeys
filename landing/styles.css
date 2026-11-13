@@ -89,15 +89,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 @media (max-width:860px){.nav__links{display:none}.nav__actions{margin-left:auto}}
 @media (max-width:420px){.nav .btn--sm span:last-child{display:none}}
 
-/* proof strip */
-.proof{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);padding-top:28px;padding-bottom:clamp(64px,10vw,120px)}
-.proof__item{padding:0 20px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
-.proof__item:first-child{border-left:0;padding-left:0}
-.proof__item b{font-size:var(--t-stat);font-weight:500;letter-spacing:-.03em;line-height:1}
-.proof__item b small{font-size:var(--t-small);color:var(--muted);letter-spacing:0}
-.proof__item span{font-size:var(--t-small);color:var(--muted);max-width:26ch}
-@media (max-width:860px){.proof{grid-template-columns:1fr 1fr;row-gap:28px}.proof__item:nth-child(3){border-left:0;padding-left:0}}
-@media (max-width:480px){.proof{grid-template-columns:1fr}.proof__item{border-left:0;padding-left:0}}
 
 /* type */
 .eyebrow{font:500 var(--t-micro) var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
@@ -350,14 +341,30 @@ button{font:inherit;color:inherit;cursor:pointer}
 .scope__read{margin:0;font-size:var(--t-micro);color:var(--stage-muted)}
 @media (max-width:900px){.stage{min-height:calc(100dvh - 64px)}.stage__in{padding-bottom:32vh}}
 
-/* ---------- spin: a pinned stretch of scroll where the 3D piano turns a full circle ---------- */
-.spin{height:300vh;background:var(--stage);color:var(--stage-ink)}
-.spin .spin__pin{position:sticky;top:64px;padding-top:var(--s-6);padding-bottom:var(--s-6);pointer-events:none}
-.spin__title{font:800 var(--t-h2)/.92 var(--display);text-transform:uppercase;margin:0;max-width:12ch}
-.spin__notes{list-style:none;margin:var(--s-5) 0 0;padding:0;display:grid;gap:var(--s-2);font-size:var(--t-small);color:var(--stage-muted)}
-.spin__notes li{display:flex;align-items:center;gap:var(--s-3);opacity:clamp(.15,calc((var(--s,0) - .08) * 5),1);transition:opacity var(--dur-1) linear}
-.spin__notes li::before{content:"";width:18px;height:1px;background:var(--accent)}
-.spin__notes li:nth-child(2){opacity:clamp(.15,calc((var(--s,0) - .38) * 5),1)}
-.spin__notes li:nth-child(3){opacity:clamp(.15,calc((var(--s,0) - .68) * 5),1)}
-.no-3d .spin{height:auto;padding:var(--section) 0}
-@media (prefers-reduced-motion:reduce){.spin{height:auto;padding:var(--section) 0}.spin__notes li{opacity:1}}
+/* ---------- film: shots 2 and 3 (lid opens, dive to the hammers, cut to black) ----------
+   piano3d.js sets --f on #film. Each line of text owns a window of --f and fades in and out inside it,
+   like a subtitle. The cut is a black plate inside the pinned layer, above the fixed canvas. */
+.film{height:420vh;background:var(--stage);color:var(--stage-ink)}
+.film__pin{position:sticky;top:0;height:100vh;height:100dvh;pointer-events:none;overflow:hidden}
+.film__pin::before{content:"";position:absolute;inset:auto 0 0;height:42%;background:linear-gradient(rgba(14,14,16,0),rgba(14,14,16,.88))}
+.film__sub,.film__stats li{position:absolute;left:50%;bottom:clamp(40px,9vh,96px);width:min(100% - 32px,640px);transform:translateX(-50%) translateY(calc((1 - var(--o)) * 14px));opacity:var(--o);text-align:center;margin:0}
+.film__sub{font:800 var(--t-h2)/.95 var(--display);text-transform:uppercase;letter-spacing:.005em;text-wrap:balance;
+  --o:clamp(0,min((var(--f,0) - .1) * 9,(.38 - var(--f,0)) * 9),1)}
+.film__stats{list-style:none;margin:0;padding:0}
+.film__stats li{display:grid;gap:10px;justify-items:center}
+.film__stats b{font-size:var(--t-stat);font-weight:500;letter-spacing:-.03em;line-height:1}
+.film__stats b small{font-size:var(--t-small);color:var(--stage-muted);letter-spacing:0}
+.film__stats span{font-size:var(--t-small);color:var(--stage-muted);max-width:34ch}
+.film__stats li:nth-child(1){--o:clamp(0,min((var(--f,0) - .5) * 30,(.6 - var(--f,0)) * 30),1)}
+.film__stats li:nth-child(2){--o:clamp(0,min((var(--f,0) - .6) * 30,(.7 - var(--f,0)) * 30),1)}
+.film__stats li:nth-child(3){--o:clamp(0,min((var(--f,0) - .7) * 30,(.8 - var(--f,0)) * 30),1)}
+.film__stats li:nth-child(4){--o:clamp(0,min((var(--f,0) - .8) * 30,(.9 - var(--f,0)) * 30),1)}
+.film__cut{position:absolute;inset:0;background:#000;opacity:clamp(0,(var(--f,0) - .93) * 40,1)}
+/* without the scroll film (no WebGL or reduced motion): one still frame with every line visible */
+.no-3d .film{height:auto;padding:var(--section) 0}
+.no-3d .film__pin{position:static;height:auto;display:grid;gap:var(--s-6);padding:0 var(--gutter)}
+.no-3d .film__sub,.no-3d .film__stats li{position:static;transform:none;opacity:1;width:auto;left:auto}
+.no-3d .film__stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s-6)}
+.no-3d .film__cut,.no-3d .film__pin::before{display:none}
+@media (prefers-reduced-motion:reduce){.film{height:auto;padding:var(--section) 0}.film__pin{position:static;height:auto;display:grid;gap:var(--s-6);padding:0 var(--gutter)}
+  .film__sub,.film__stats li{position:static;transform:none;opacity:1;width:auto;left:auto}.film__stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s-6)}.film__cut,.film__pin::before{display:none}}

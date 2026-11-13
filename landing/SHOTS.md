@@ -1,6 +1,6 @@
 # Shot list: the landing as a film
 
-Status: draft, approved direction. Not built yet except where marked **(live)**.
+Status: approved. Shots 0 to 3 are built; the rest is not built yet except where marked **(live)**.
 
 A concert grand alone in a dark room. The camera approaches it, listens, compares, and hands over the three
 presets. There are no "sections": scroll moves the film forward.
@@ -21,21 +21,21 @@ presets. There are no "sections": scroll moves the film forward.
 - **Sound:** nothing yet. This choice is the permission for anything to play later.
 - **Out:** slow fade from black into shot 1.
 
-### 1 · In the dark (1 screen)
+### 1 · In the dark (1 screen) **(live)**
 - **Image:** a spotlight comes on from above and reveals the piano tail first, lid closed. Everything else stays in shadow.
 - **Camera:** still, eye level, from the side.
 - **Text:** the REFERENCEKEYS wordmark rises, with "Three concert grands, measured against the real thing" below.
 - **Sound:** with sound on, the first bars of German Concert V2.
 
-### 2 · The lid opens (pinned, 1.5 screens)
+### 2 · The lid opens (pinned, 1.5 screens) **(live)**
 - **Image:** the lid rises to its stick as you scroll. Light falls in and the strings appear.
 - **Camera:** travels along the side from the tail toward the keyboard.
 - **Text:** one subtitle line: "One reference. One goal: sound the same."
 - **Sound:** German Concert continues and gets slightly louder as the lid opens.
 
-### 3 · The hammers (pinned, 2 screens)
+### 3 · The hammers (pinned, 2 screens) **(live)**
 - **Image:** close-up of hammers and strings moving with the real audio, background out of focus.
-- **Camera:** drops into the piano, almost grazing the strings.
+- **Camera:** drops to the curved side, under the open lid (the music desk sits right above the hammers, so it must be seen edge-on), and tracks along the hammer line. Fog stands in for depth of field.
 - **Text:** the numbers arrive one by one as subtitles (live dB gap, stereo width, number of renders). Replaces the proof strip.
 - **Out:** a half-second **cut to black**, the film's first hard cut.
 
@@ -74,7 +74,7 @@ Merges the current story, compare and takes sections.
 
 ## Rules for the whole film
 - **Length:** about 12 screens of scroll.
-- **Scroll:** Lenis, with inertia, so the camera glides.
+- **Scroll:** native scroll; the camera eases toward the scroll position so it glides (no scroll hijacking). Lenis stays an option.
 - **Grounding (live):** the piano never floats. A pool of light sits on the floor under it and a soft shadow sits inside the pool: a wide blurred shadow of the case plus tight contact spots under the casters, lyre and pedals. Light comes from above and slightly in front, so the shadow stays fixed under the case while the camera turns. Baked once into canvas textures, no real-time shadow maps. When the lid animates (shot 2) its shadow should stretch with it.
 - **Light:** the piano stays a white line drawing, that is the signature. Add spotlight, floor shadow and depth of field on close shots.
 - **Audio:** a mute button always visible. Nothing plays without consent from the opening.

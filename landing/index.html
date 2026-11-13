@@ -63,7 +63,7 @@
       <h1 class="wordmark" aria-label="ReferenceKeys"><span class="wm"><span>Reference</span></span><span class="wm wm--hot"><span>Keys</span></span></h1>
       <div class="stage__row">
         <div class="stage__copy">
-          <p class="stage__claim" data-i18n="hero.title">Piano presets, calibrated against <em>the real thing.</em></p>
+          <p class="stage__claim" data-i18n="hero.title">Three concert grands, measured against <em>the real thing.</em></p>
           <p class="stage__sub" data-i18n="hero.sub">Three Keyscape patches tuned by measurement, each matched band by band to a recording of a real concert grand.</p>
         </div>
         <div class="stage__ctas">
@@ -78,27 +78,20 @@
     </div>
   </section>
 
-  <!-- SPIN: pinned section, piano3d.js walks the camera a full circle around the grand -->
-  <section class="spin" id="spin" aria-labelledby="spinTitle">
-    <div class="wrap spin__pin">
-      <p class="eyebrow" data-i18n="spin.eyebrow">Scroll to walk around it</p>
-      <h2 class="spin__title" id="spinTitle" data-i18n="spin.title">Nine feet of concert grand</h2>
-      <ol class="spin__notes num">
-        <li data-i18n="spin.n1">88 keys, each one listening to the audio</li>
-        <li data-i18n="spin.n2">Lid open, three legs, three pedals</li>
-        <li data-i18n="spin.n3">Every line drawn in code</li>
+  <!-- FILM: shots 2 and 3 of SHOTS.md. A pinned stretch of scroll; piano3d.js drives the camera, opens the lid,
+       dives to the hammers and cuts to black. --f (0 to 1) is the progress through this section. -->
+  <section class="film" id="film" aria-label="The piano, up close">
+    <div class="film__pin">
+      <p class="film__sub film__sub--lid" data-i18n="film.lid">One reference. One goal: sound the same.</p>
+      <ol class="film__stats" aria-label="Measurements">
+        <li><b class="num">±3<small> dB</small></b><span data-i18n="proof.1">Royal 3D vs the Nord, every octave from 32 Hz to 8 kHz</span></li>
+        <li><b class="num">469<small> / 477 Hz</small></b><span data-i18n="proof.2">German Concert V2 brightness center vs the Roland</span></li>
+        <li><b class="num">0.45<small> / 0.45</small></b><span data-i18n="proof.3">German Concert V2 stereo width vs the Roland</span></li>
+        <li><b class="num">19<small> to </small>111</b><span data-i18n="proof.4">Velocities measured on a Yamaha MX88</span></li>
       </ol>
+      <div class="film__cut" aria-hidden="true"></div>
     </div>
   </section>
-
-  <!-- PROOF: real measured numbers, no cards -->
-  <section class="proof wrap" aria-label="Measurements">
-    <div class="proof__item reveal"><b class="num">±3<small> dB</small></b><span data-i18n="proof.1">Royal 3D vs the Nord, every octave from 32 Hz to 8 kHz</span></div>
-    <div class="proof__item reveal"><b class="num">469<small> / 477 Hz</small></b><span data-i18n="proof.2">German Concert V2 brightness center vs the Roland</span></div>
-    <div class="proof__item reveal"><b class="num">0.45<small> / 0.45</small></b><span data-i18n="proof.3">German Concert V2 stereo width vs the Roland</span></div>
-    <div class="proof__item reveal"><b class="num">19<small> to </small>111</b><span data-i18n="proof.4">Velocities measured on a Yamaha MX88</span></div>
-  </section>
-
 
   <!-- STORY: the German Concert case, scroll-driven (IntersectionObserver steps, sticky visual) -->
   <section class="story" id="story">

@@ -8,7 +8,7 @@ window.RK_LOCALES.en = {
   "nav.presets": "Presets",
   "cta.download": "Download presets",
   "cta.listen": "Listen",
-  "hero.title": "Piano presets, calibrated against <em>the real thing.</em>",
+  "hero.title": "Three concert grands, measured against <em>the real thing.</em>",
   "hero.sub": "Three Keyscape patches tuned by measurement, each matched band by band to a recording of a real concert grand.",
   "hero.cap": "CZ German Concert V2, rendered from my own performance. Tap to play.",
   "proof.1": "Royal 3D vs the Nord, every octave from 32 Hz to 8 kHz",
@@ -94,9 +94,5 @@ window.RK_LOCALES.en = {
   "foot.ds": "Design system",
   "hear.v1": "Hear V1",
   "hear.v2": "Hear V2",
-  "spin.eyebrow": "Scroll to walk around it",
-  "spin.title": "Nine feet of concert grand",
-  "spin.n1": "88 keys, each one listening to the audio",
-  "spin.n2": "Lid open, three legs, three pedals",
-  "spin.n3": "Every line drawn in code"
+  "film.lid": "One reference. One goal: sound the same."
 };

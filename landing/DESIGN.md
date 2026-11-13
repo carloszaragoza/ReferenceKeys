@@ -78,7 +78,7 @@ Inside components use the 4px scale; between components use `--s-5` or more; bet
 
 - `--ease` (expo out) for everything. `--dur-1` .25s for UI state, `--dur-2` .5s for content changes, `--dur-3` .9s for entrances.
 - Display words rise out of a mask (`.wm`). The story drawing opens with a scroll timeline; browsers without it get the still image.
-- The 3D piano is the signature motion: scroll is the camera. Hero (resting, beside the copy), `#spin` (one full turn, dipping under the case and rising over the lid), then a slow half turn behind the rest of the page at 30% opacity. Keys move only with real audio.
+- The 3D piano is the signature motion: scroll is the camera, and the camera glides toward the scroll position instead of snapping. Shot 1 (hero: spotlight and fog reveal the piano, lid closed), `#film` (shot 2: the lid opens as the camera travels the curved side; shot 3: under the lid along the hammer line, numbers as subtitles; cut to black), then a slow half turn behind the rest of the page at 30% opacity. Keys move only with real audio. Subtitles own a window of `--f` and fade in and out inside it.
 - The 3D piano never floats: a baked pool of light on the floor and a soft shadow inside it (wide blur of the case plus contact spots under casters, lyre and pedals). On the page theme the pool switches off and the shadow becomes faint ink. The film this motion grows into is in `SHOTS.md`.
 - No scroll listeners: IntersectionObserver for reveals and story steps, requestAnimationFrame only while audio plays.
 - `prefers-reduced-motion: reduce` turns off entrances, drift and zoom.
