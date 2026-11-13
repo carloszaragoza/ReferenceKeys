@@ -95,5 +95,10 @@ window.RK_LOCALES.en = {
   "404.cta": "Back to ReferenceKeys",
   "foot.ds": "Design system",
   "hear.v1": "Hear V1",
-  "hear.v2": "Hear V2"
+  "hear.v2": "Hear V2",
+  "spin.eyebrow": "Scroll to walk around it",
+  "spin.title": "Nine feet of concert grand",
+  "spin.n1": "88 keys, each one listening to the audio",
+  "spin.n2": "Lid open, three legs, three pedals",
+  "spin.n3": "Every line drawn in code"
 };

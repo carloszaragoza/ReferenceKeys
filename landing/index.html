@@ -22,6 +22,7 @@
 <script>document.documentElement.classList.add("js");try{if(!sessionStorage.getItem("rk-gate"))document.documentElement.classList.add("gated")}catch(e){}</script>
 </head>
 <body>
+<div class="bg3d" id="bg3d" aria-hidden="true"><img class="bg3d__fallback" src="assets/art/piano-top.svg" alt="" width="760" height="1000"></div>
 <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 
 <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
@@ -57,7 +58,6 @@
 <main id="main">
   <!-- STAGE: giant wordmark over the hammers, the live analyzer is the hero object -->
   <section class="stage" id="stage">
-    <div class="piano3d" id="piano3d" aria-hidden="true"><div class="piano3d__in"><canvas id="pianoCanvas"></canvas></div></div>
     <div class="wrap stage__in">
       <p class="stage__kicker num" data-i18n="hero.kicker">Keyscape · Omnisphere · Free presets</p>
       <h1 class="wordmark" aria-label="ReferenceKeys"><span class="wm"><span>Reference</span></span><span class="wm wm--hot"><span>Keys</span></span></h1>
@@ -75,6 +75,19 @@
         <div class="scope__bar" aria-hidden="true"><i id="scopeHead"></i></div>
         <p class="scope__read num" id="scopeRead" aria-live="polite"></p>
       </div>
+    </div>
+  </section>
+
+  <!-- SPIN: pinned section, piano3d.js walks the camera a full circle around the grand -->
+  <section class="spin" id="spin" aria-labelledby="spinTitle">
+    <div class="wrap spin__pin">
+      <p class="eyebrow" data-i18n="spin.eyebrow">Scroll to walk around it</p>
+      <h2 class="spin__title" id="spinTitle" data-i18n="spin.title">Nine feet of concert grand</h2>
+      <ol class="spin__notes num">
+        <li data-i18n="spin.n1">88 keys, each one listening to the audio</li>
+        <li data-i18n="spin.n2">Lid open, three legs, three pedals</li>
+        <li data-i18n="spin.n3">Every line drawn in code</li>
+      </ol>
     </div>
   </section>
 
@@ -162,7 +175,7 @@
         </div>
       </div>
       <div class="takes">
-        <div class="takes__photo reveal"><img src="assets/art/hands.svg" width="800" height="1000" loading="lazy" alt="Line drawing of two hands playing a chord, the pressed keys in red"></div>
+        <div class="takes__photo reveal"><img src="assets/art/velocity.svg" width="800" height="1000" loading="lazy" alt="Line drawing of a keyboard: four pressed keys with bars for the velocities measured on the MX88"></div>
         <div class="takes__body">
         <h3 class="h3 reveal" data-i18n="takes.title">Live takes on my MX88</h3>
         <p class="lead lead--sm reveal" data-i18n="takes.lead">Different performances, so listen for the tone, not the notes.</p>
@@ -274,5 +287,6 @@
 <script src="locales/es.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script type="module" src="piano3d.js"></script>
 </body>
 </html>

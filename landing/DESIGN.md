@@ -77,7 +77,8 @@ Inside components use the 4px scale; between components use `--s-5` or more; bet
 ## Motion
 
 - `--ease` (expo out) for everything. `--dur-1` .25s for UI state, `--dur-2` .5s for content changes, `--dur-3` .9s for entrances.
-- Display words rise out of a mask (`.wm`). The stage drawing and the story drawing move with scroll timelines; browsers without them get the still image.
+- Display words rise out of a mask (`.wm`). The story drawing opens with a scroll timeline; browsers without it get the still image.
+- The 3D piano is the signature motion: scroll is the camera. Hero (resting, beside the copy), `#spin` (one full turn, dipping under the case and rising over the lid), then a slow half turn behind the rest of the page at 30% opacity. Keys move only with real audio.
 - No scroll listeners: IntersectionObserver for reveals and story steps, requestAnimationFrame only while audio plays.
 - `prefers-reduced-motion: reduce` turns off entrances, drift and zoom.
 
@@ -91,9 +92,9 @@ Generated, never traced from photos: `python3 tools/landing/draw_art.py` writes 
 
 | File | Palette | Where |
 |---|---|---|
-| `piano-top.svg` | stage | Social card and this sheet. The hero draws the same geometry live on a canvas |
+| `piano-top.svg` | stage | Social card, this sheet and the no-WebGL fallback. `piano3d.js` builds the 3D piano from the same plan |
 | `strings.svg` | page | Story opener |
-| `hands.svg` | band | Live takes |
+| `velocity.svg` | band | Live takes: pressed keys with the velocities measured on the MX88 |
 | `action.svg` | stage | Method tile |
 
 ## Components

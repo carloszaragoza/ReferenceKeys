@@ -25,7 +25,8 @@ def style(pal):
         return (f'.l,.l2,.l3,.o,.ao{{fill:none;stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}}'
                 f'.l{{stroke:{ink}}}.l2{{stroke:{ink};stroke-opacity:.5}}.l3{{stroke:{ink};stroke-opacity:.22}}'
                 f'.o{{fill:{occ};stroke:{ink}}}.a{{fill:{acc}}}.ao{{stroke:{acc};stroke-width:1.6}}.d{{fill:{ink}}}.k{{fill:{key};stroke:{ink};stroke-width:1.2;vector-effect:non-scaling-stroke}}'
-                f'.dash{{stroke-dasharray:3 5}}')
+                f'.dash{{stroke-dasharray:3 5}}'
+                f'.t,.tm{{font:500 26px ui-monospace,SFMono-Regular,Menlo,monospace;fill:{ink}}}.tm{{font-size:20px;fill-opacity:.6}}')
     light, dark = PALETTES[pal]
     css = rules(*light)
     if dark:
@@ -185,75 +186,41 @@ def strings_close(name='strings', pal='page'):
     s.save(name)
 
 
-# ---------------------------------------------------------------- two hands playing, seen from above
-def capsule(x0, y0, length, width, angle, c='o'):
-    """Rounded finger from (x0, y0) pointing at angle (degrees, 0 = straight down)."""
-    a = math.radians(angle)
-    return (f'<rect class="{c}" x="{f(x0 - width / 2)}" y="{f(y0)}" width="{f(width)}" height="{f(length)}" rx="{f(width / 2)}"'
-            f' transform="rotate({f(-angle)} {f(x0)} {f(y0)})"/>')
-
-
-def tip(x0, y0, length, angle):
-    a = math.radians(angle)
-    return x0 + math.sin(a) * length, y0 + math.cos(a) * length
-
-
-def hand(s, cx, mirror, pressed):
-    m = -1 if mirror else 1
-    # forearm and sleeve
-    s.add(f'<path class="o" d="M{f(cx - 70)} -20C{f(cx - 66)} 120 {f(cx - 56)} 220 {f(cx - 54)} 300L{f(cx + 54)} 300C{f(cx + 56)} 220 {f(cx + 66)} 120 {f(cx + 70)} -20Z"/>')
-    s.add(f'<path class="l2" d="M{f(cx - 67)} 120L{f(cx + 67)} 120"/>')
-    s.add(f'<path class="l3" d="M{f(cx - 68)} 100L{f(cx + 68)} 100"/>')
-    fingers = [(-54, 168, 26, -6), (-18, 205, 29, -2), (18, 214, 29, 2), (52, 192, 27, 6)]  # pinky..index for a left hand
-    tips = []
-    for i, (dx, ln, wd, ang) in enumerate(fingers):
-        x0 = cx + m * dx
-        s.add(capsule(x0, 392, ln, wd, m * ang))
-        tx, ty = tip(x0, 392, ln - wd / 2, m * ang)
-        tips.append((tx, ty))
-        for j in (0.42, 0.7):  # knuckle creases
-            kx, ky = tip(x0, 392, ln * j, m * ang)
-            s.add(f'<path class="l3" d="M{f(kx - wd * .32)} {f(ky)}q{f(wd * .32)} 4 {f(wd * .64)} 0"/>')
-    # thumb
-    tx0, ty0 = cx + m * 66, 360  # root sits inside the palm, which is drawn on top
-    s.add(capsule(tx0, ty0, 200, 38, m * 22))
-    tips.append(tip(tx0, ty0, 181, m * 22))
-    # palm over the finger roots
-    s.add(f'<path class="o" d="M{f(cx - 56)} 262C{f(cx - 80)} 300 {f(cx - 92)} 360 {f(cx - 86)} 404C{f(cx - 80)} 430 {f(cx - 40)} 438 {f(cx)} 436'
-          f'C{f(cx + 40)} 438 {f(cx + 82)} 430 {f(cx + 88)} 404C{f(cx + 94)} 360 {f(cx + 82)} 300 {f(cx + 56)} 262Z"/>')
-    s.add(f'<path class="l3" d="M{f(cx - 40)} 340q{f(m * 20 + 40)} 30 {f(80)} 6"/>')
-    # pressed keys get small motion marks above the fingertip
-    for i in pressed:
-        x, y = tips[i]
-        s.add(f'<path class="ao" d="M{f(x - 12)} {f(y - 30)}q12 -8 24 0"/>')
-    return tips
-
-
-def hands(name='hands', pal='band'):
+# ---------------------------------------------------------------- keyboard with measured velocities (MX88)
+def velocity(name='velocity', pal='band'):
+    """Four pressed keys, each with a bar for the velocity measured on the MX88 (pp 19, p 28, mf 48, f 87)."""
     W, H = 800, 1000
-    s = SVG(W, H, pal, 'Two hands playing a chord on a piano keyboard')
-    n, y0 = 14, 560
+    s = SVG(W, H, pal, 'Keyboard with four pressed keys and the velocities measured on the MX88')
+    n, y0, top = 14, 600, 150
     kw = W / n
     letters = 'CDEFGAB'
-    # fingertip x positions decide which keys go down (filled accent)
-    s_keys = []
+    hits = {1: ('pp', 19), 4: ('p', 28), 8: ('mf', 48), 11: ('f', 87)}
+    vy = lambda v: y0 - 30 - (v / 127) * (y0 - 30 - top)
+    # grid: velocity 0, 32, 64, 96, 127
+    for v in (0, 32, 64, 96, 127):
+        s.add(line(40, vy(v), W - 24, vy(v), 'l3'))
+        s.add(f'<text class="tm" x="36" y="{f(vy(v) + 7)}" text-anchor="end">{v}</text>')
+    # the measured curve through the four hits
+    pts = [((k + .5) * kw, vy(v)) for k, (_, v) in sorted(hits.items())]
+    d = 'M' + ' '.join(f'{f(x)} {f(y)}' for x, y in [(40, vy(0) + 0)] + pts)
+    s.add(f'<path class="l2 dash" d="{d}"/>')
+    # keys
     for k in range(n):
-        s_keys.append((k * kw, kw))
-    # draw hands first on a scratch SVG to learn the fingertip positions
-    probe = SVG(W, H, pal, '')
-    lt = hand(probe, 210, False, [])
-    rt = hand(probe, 590, True, [])
-    down = {int(x // kw) for x, _ in [lt[0], lt[2], lt[4], rt[1], rt[3], rt[4]]}
-    for k, (x, w) in enumerate(s_keys):
-        s.add(rect(x, y0, w, H - y0 + 10, 'a' if k in down else 'o', 3))
-        if k in down:
-            s.add(rect(x, y0, w, H - y0 + 10, 'l', 3))
+        s.add(rect(k * kw, y0, kw, H - y0 + 10, 'a' if k in hits else 'o', 3))
+        if k in hits:
+            s.add(rect(k * kw, y0, kw, H - y0 + 10, 'l', 3))
     for k in range(n - 1):
         if letters[k % 7] in 'CDFGA':
-            s.add(rect((k + 1) * kw - 17, y0, 34, 250, 'k', 3))
+            s.add(rect((k + 1) * kw - 17, y0, 34, 240, 'k', 3))
     s.add(line(0, y0, W, y0, 'l'))
-    hand(s, 210, False, [0, 2, 4])
-    hand(s, 590, True, [1, 3, 4])
+    # bars rising from the pressed keys
+    for k, (lab, v) in hits.items():
+        cx = (k + .5) * kw
+        s.add(rect(cx - 6, vy(v), 12, y0 - 30 - vy(v), 'a', 6))
+        s.add(circle(cx, vy(v), 11, 'o'))
+        s.add(circle(cx, vy(v), 4, 'd'))
+        s.add(f'<text class="t" x="{f(cx)}" y="{f(vy(v) - 24)}" text-anchor="middle">{lab} {v}</text>')
+    s.add(f'<text class="tm" x="40" y="{top - 60}">MX88 · velocity</text>')
     s.save(name)
 
 
@@ -300,5 +267,5 @@ def action(name='action', pal='stage'):
 if __name__ == '__main__':
     piano_top()
     strings_close()
-    hands()
+    velocity()
     action()

@@ -85,7 +85,7 @@
   function tick() {
     const p = audio.duration ? audio.currentTime / audio.duration : 0;
     if (owner === 'hero') { $('#scopeHead').style.transform = `scaleX(${p})`; if (!audio.paused) measure('german-v2'); hud(); }
-    if (owner === 'hero' || pianoBusy()) { listenKeys(); drawPiano(performance.now()); }
+    listenKeys();
     if (owner === 'ab') { drawWave($('#abWave'), abName, p); $('#abTime').textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`; if (!audio.paused) measure(); drawLive(); }
     if (owner instanceof Element) { const c = $('canvas', owner); if (c) drawWave(c, owner.dataset.src, p); }
     if (!audio.paused || pianoBusy()) raf = requestAnimationFrame(tick); // let the keys settle after a pause
@@ -162,32 +162,18 @@
     setTimeout(() => $('#gateSound').focus({ preventScroll: true }), 50);
   } else gate.hidden = true;
 
-  /* ---------- hero piano: the drawing plays along with the real audio ----------
-     Each of the 88 keys listens to its own fundamental in the analyser. A key goes down, its hammer lights
-     and its string vibrates only when that note is a local peak in the spectrum. Same geometry as
-     tools/landing/draw_art.py. */
-  const PW = 760, PH = 1000, INK = '244,242,238', ACC = '255,93,61';
-  const bez = (p0, p1, p2, p3, n = 40) => { const o = []; for (let i = 1; i <= n; i++) { const q = i / n, a = (1 - q) ** 3, b = 3 * (1 - q) ** 2 * q, c = 3 * (1 - q) * q * q, d = q ** 3; o.push([a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0], a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]]); } return o; };
-  const INNER = [[78, 870], [78, 232], ...bez([78, 232], [78, 136], [148, 84], [230, 90]), ...bez([230, 90], [318, 100], [354, 184], [382, 306]), ...bez([382, 306], [412, 450], [486, 536], [588, 576]), ...bez([588, 576], [642, 598], [672, 632], [672, 690]), [672, 870]];
-  const OUTER = [[60, 880], [60, 230], ...bez([60, 230], [60, 120], [140, 60], [230, 70]), ...bez([230, 70], [330, 82], [372, 170], [400, 300]), ...bez([400, 300], [430, 440], [500, 520], [600, 560]), ...bez([600, 560], [660, 585], [690, 620], [690, 690]), [690, 880]];
-  const topY = x => { let m = Infinity; for (let i = 0; i < INNER.length; i++) { const [x1, y1] = INNER[i], [x2, y2] = INNER[(i + 1) % INNER.length]; if ((x1 - x) * (x2 - x) <= 0 && x1 !== x2) m = Math.min(m, y1 + (y2 - y1) * (x - x1) / (x2 - x1)); } return m; };
-  const KX0 = 72, KX1 = 678, KY0 = 880, KY1 = 970, KW = (KX1 - KX0) / 52;
-  const KEYS = []; {
-    let w = 0;
-    for (let k = 0; k < 88; k++) {
-      const black = [1, 3, 6, 8, 10].includes((k + 9) % 12), x = 92 + k * (568 / 87);
-      const ex = k < 20 ? x + 70 - k * 1.3 : x, ey = topY(ex) + (k < 20 ? 16 : 14);
-      KEYS.push({ black, f: 27.5 * Math.pow(2, k / 12), kx: black ? KX0 + w * KW - 3.6 : KX0 + w * KW, sx: x, ex, ey });
-      if (!black) w++;
-    }
-  }
+  /* ---------- live keys: each of the 88 keys listens to its own fundamental ----------
+     A key counts as sounding when its note is a local peak in the spectrum and rises above its own
+     running level. piano3d.js reads window.RK.act to press keys, lift hammers and light strings. */
+  const KEY_F = Array.from({ length: 88 }, (_, k) => 27.5 * Math.pow(2, k / 12));
   const act = new Float32Array(88), avgDb = new Float32Array(88).fill(-110), lvl = new Float32Array(88);
+  window.RK = { act };
   function listenKeys() {
-    const on = owner === 'hero' && !audio.paused && analyser;
-    if (!on) { for (let k = 0; k < 88; k++) act[k] *= .86; return; }
+    if (audio.paused || !analyser) { for (let k = 0; k < 88; k++) act[k] *= .86; return; }
+    analyser.getFloatFrequencyData(fbuf);
     const hz = actx.sampleRate / analyser.fftSize;
     for (let k = 0; k < 88; k++) {
-      const f = KEYS[k].f, lo = Math.max(1, Math.floor(f * .985 / hz)), hi = Math.max(lo, Math.ceil(f * 1.015 / hz));
+      const f = KEY_F[k], lo = Math.max(1, Math.floor(f * .985 / hz)), hi = Math.max(lo, Math.ceil(f * 1.015 / hz));
       let m = -160; for (let j = lo; j <= hi; j++) m = Math.max(m, fbuf[j]); lvl[k] = m;
     }
     for (let k = 0; k < 88; k++) {
@@ -197,67 +183,11 @@
       act[k] = Math.max(hit, act[k] * .86);
     }
   }
-  const pianoBase = document.createElement('canvas');
-  let baseKey = '';
-  function drawBase(w, h, dpr, s) {
-    pianoBase.width = Math.round(w * dpr); pianoBase.height = Math.round(h * dpr);
-    const x = pianoBase.getContext('2d'); x.setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
-    const lw = 1 / s, poly = (pts, a) => { x.beginPath(); pts.forEach(([px, py], i) => i ? x.lineTo(px, py) : x.moveTo(px, py)); x.closePath(); x.strokeStyle = `rgba(${INK},${a})`; x.lineWidth = lw; x.stroke(); };
-    x.lineCap = x.lineJoin = 'round';
-    poly(OUTER, .9); poly(INNER, .45);
-    x.strokeStyle = `rgba(${INK},.85)`; x.lineWidth = lw; x.beginPath();
-    for (let px = 180; px <= 664; px += 6) { const py = topY(px) + 34; px === 180 ? x.moveTo(px, py) : x.lineTo(px, py); }
-    x.stroke();
-    x.strokeStyle = `rgba(${INK},.4)`;
-    [[210, 846, 224, 620, 262, 360, 236, 120], [420, 846, 426, 700, 470, 590, 540, 548], [130, 846, 140, 600, 150, 300, 150, 140]].forEach(c => { x.beginPath(); x.moveTo(c[0], c[1]); x.bezierCurveTo(c[2], c[3], c[4], c[5], c[6], c[7]); x.stroke(); });
-    x.fillStyle = `rgba(${INK},.9)`;
-    for (let i = 0; i < 88; i++) { x.beginPath(); x.arc(92 + i * (568 / 87), 852 + (i % 2 ? 6 : 0), 1.5, 0, 7); x.fill(); }
-    x.strokeStyle = `rgba(${INK},.9)`; x.beginPath(); x.moveTo(78, 840); x.lineTo(672, 840); x.moveTo(48, 976); x.lineTo(702, 976); x.stroke();
-    [[48, 868], [678, 868]].forEach(([cx, cy]) => { x.strokeRect(cx, cy, 24, 108); });
-  }
-  function drawPiano(now = 0) {
-    const c = $('#pianoCanvas'); if (!c || !c.clientWidth) return;
-    const dpr = Math.min(devicePixelRatio || 1, 2), w = c.clientWidth, h = c.clientHeight, s = w / PW;
-    if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
-    const key = c.width + 'x' + c.height; if (key !== baseKey) { drawBase(w, h, dpr, s); baseKey = key; }
-    const x = c.getContext('2d');
-    x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); x.drawImage(pianoBase, 0, 0);
-    x.setTransform(dpr * s, 0, 0, dpr * s, 0, 0); x.lineCap = 'round';
-    const lw = 1 / s;
-    for (let k = 0; k < 88; k++) { // hammers under the strings
-      const a = act[k]; x.fillStyle = `rgba(${ACC},${.45 + a * .55})`;
-      x.fillRect(KEYS[k].sx - 1.6 - a, 824 - a * 6, 3.2 + a * 2, 9);
-    }
-    for (let k = 0; k < 88; k++) { // strings, vibrating with their key
-      const K = KEYS[k], a = act[k], amp = reduce ? 0 : a * 5 * Math.sin(now * (.035 + k * .0009) + k);
-      x.strokeStyle = a > .05 ? `rgba(${ACC},${.35 + a * .65})` : `rgba(${INK},${k % 3 ? .2 : .42})`;
-      x.lineWidth = lw * (1 + a); x.beginPath(); x.moveTo(K.sx, 842);
-      x.quadraticCurveTo((K.sx + K.ex) / 2 + amp, (842 + K.ey) / 2, K.ex, K.ey); x.stroke();
-    }
-    for (let k = 20; k <= 68; k++) { // dampers lift off their string while the key is down
-      const K = KEYS[k], a = act[k]; x.fillStyle = '#0e0e10'; x.strokeStyle = `rgba(${INK},.8)`; x.lineWidth = lw;
-      x.beginPath(); x.roundRect(K.sx - 2.4, 784 - a * 10, 4.8, 14, 1); x.fill(); x.stroke();
-    }
-    x.lineWidth = lw;
-    KEYS.forEach((K, k) => { if (K.black) return; const a = act[k]; // white keys, then black keys on top
-      x.fillStyle = a > .05 ? `rgba(${ACC},${.25 + a * .75})` : '#0e0e10'; x.strokeStyle = `rgba(${INK},.85)`;
-      x.beginPath(); x.roundRect(K.kx, KY0 + a * 2, KW, KY1 - KY0, 1.5); x.fill(); x.stroke(); });
-    KEYS.forEach((K, k) => { if (!K.black) return; const a = act[k];
-      x.fillStyle = a > .05 ? `rgba(${ACC},${.4 + a * .6})` : '#2a2a30'; x.strokeStyle = `rgba(${INK},.85)`;
-      x.beginPath(); x.roundRect(K.kx, KY0 + a * 2, 7.2, 52, 1); x.fill(); x.stroke(); });
-  }
   const pianoBusy = () => act.some(v => v > .01);
   function hud() {
     const a = acc['german-v2'], rd = $('#scopeRead');
     if (a && a.n > 20) rd.innerHTML = `<strong>${gap(levels(a), D.sets.german.ref.bands).toFixed(1)} dB</strong> ${t('scope.live')}`;
     else rd.textContent = t('scope.idle');
-  }
-  if (!reduce && matchMedia('(pointer: fine)').matches) { // the piano leans toward the cursor
-    const p3 = $('#piano3d'); let pr = 0;
-    $('#stage').addEventListener('pointermove', e => { cancelAnimationFrame(pr); pr = requestAnimationFrame(() => {
-      const r = $('#stage').getBoundingClientRect();
-      p3.style.setProperty('--tx', ((e.clientX - r.left) / r.width - .5).toFixed(3)); p3.style.setProperty('--ty', ((e.clientY - r.top) / r.height - .5).toFixed(3));
-    }); });
   }
 
   /* ---------- story: hear V1 and V2 ---------- */
@@ -451,7 +381,7 @@
 
   /* ---------- paint everything; repaint on resize and theme change ---------- */
   function paint() {
-    drawSpec($('#miniSpec'), .45); drawPiano(); hud();
+    drawSpec($('#miniSpec'), .45); hud();
     drawWave($('#abWave'), abName, owner === 'ab' && audio.duration ? audio.currentTime / audio.duration : 0);
     $$('.take').forEach(t2 => drawWave($('canvas', t2), t2.dataset.src, 0));
     drawVel(); drawLive(); setStep(step);

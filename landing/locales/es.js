@@ -95,5 +95,10 @@ window.RK_LOCALES.es = {
   "404.cta": "Volver a ReferenceKeys",
   "foot.ds": "Sistema de diseño",
   "hear.v1": "Escucha V1",
-  "hear.v2": "Escucha V2"
+  "hear.v2": "Escucha V2",
+  "spin.eyebrow": "Haz scroll para rodearlo",
+  "spin.title": "Nueve pies de piano de cola",
+  "spin.n1": "88 teclas, cada una escuchando el audio",
+  "spin.n2": "Tapa abierta, tres patas, tres pedales",
+  "spin.n3": "Cada línea, dibujada en código"
 };
