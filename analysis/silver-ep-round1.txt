@@ -44,3 +44,13 @@ Format fix (2026-11-13): patches read straight out of the factory library databa
 (SYNTHENG Vers 22, no per-model interface data), so Keyscape showed the patch name but not the model. The patch
 is now round-tripped through the Keyscape AU (tools/render/dumpstate) and saved in the format Keyscape writes
 itself (Vers 29). Same calibrated values, identical render.
+
+Model view fix (2026-11-13): the Vers 29 round-trip was not enough. Keyscape picks the model view (the MKS-20
+panel and its controls) from SYNTHENG origLibName and origPatchName, which it writes only when a patch is saved
+from its own browser. The factory patch was saved from Keyscape (Save Patch As) and the calibration applied on top:
+same knob changes plus the panel mirrors (Custom_3 Bass, Custom_4 Treble, Custom_16 Chorus Depth, MOD_MATRIX defV2).
+That save also carries the player's MX88 Wide velocity curve, which plays brighter, so Treble went 0.28 -> 0.14:
+               31    63   125   250   500  1000  2000  4000  8000 16000   width  tilt  cen
+final s1     +24.8  +2.2  +1.6  -1.7  -0.4  -1.3  +1.5  +0.8  +0.1  +1.1   0.18  -5.3  350
+final s7     +27.7  +4.9  +0.9  -3.4  -0.4  -1.2  +1.4  +0.7  -1.0  +0.2   0.18  -5.0  332
+Rule for next patches: start from a factory patch saved by Keyscape, not from the library database extract.
